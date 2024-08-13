@@ -558,8 +558,13 @@ if [[ -n "${ZZZ_PATH}" ]]; then
   fi
 
   if [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]]; then
+    echo "111"
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
+    echo "3333"
+    ls -l /home/runner/work/build-actions/build-actions/openwrt/package
+    ls -l ${GENE_PATH}
+    ls -l ${HOME_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
   sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
@@ -571,7 +576,8 @@ echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
 sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
 echo "luciversion    = \"${LUCI_EDITION}\"" >> /usr/lib/lua/luci/version.lua
 sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
-echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
+# echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
+echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
 fi
 
