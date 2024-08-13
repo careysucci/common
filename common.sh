@@ -326,11 +326,11 @@ src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
 ./scripts/feeds update -a
 
-if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
-  echo "src-git danshui2 https://github.com/careysucci/openwrt-package.git;Theme2" >> "feeds.conf.default"
-else
-  echo "src-git danshui2 https://github.com/careysucci/openwrt-package.git;Theme1" >> "feeds.conf.default"
-fi
+# if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
+#   echo "src-git danshui2 https://github.com/careysucci/openwrt-package.git;Theme2" >> "feeds.conf.default"
+# else
+#   echo "src-git danshui2 https://github.com/careysucci/openwrt-package.git;Theme1" >> "feeds.conf.default"
+# fi
 # adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-msd_lite,msd_lite,
 # luci-app-smartdns,smartdns,
 z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
