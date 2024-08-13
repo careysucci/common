@@ -310,6 +310,8 @@ cd ${HOME_PATH}
 [[ -d "${HOME_PATH}/doc" ]] && rm -rf ${HOME_PATH}/doc
 [[ ! -d "${HOME_PATH}/LICENSES/doc" ]] && mkdir -p "${HOME_PATH}/LICENSES/doc"
 [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p "${HOME_PATH}/build_logo"
+echo ls -l ${HOME_PATH}/LICENSES/doc
+echo ls -l ${HOME_PATH}/build_logo
 
 git pull
 
@@ -341,7 +343,7 @@ luci-app-gost,gost,luci-app-wizard,nano,dnsmasq-full,dropbear \
 luci-app-ssr-plus,*luci-app-passwall2,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata,"
 t=(${z//,/ })
 for x in ${t[@]}; do \
-  find . -type d -name "${x}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+  find . -type d -name "${x}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
 done
 
 case "${SOURCE_CODE}" in
@@ -349,7 +351,7 @@ COOLSNOWWOLF)
   s="mentohust"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ -d "${HOME_PATH}/build/common/Share/btrfs-progs" ]]; then
     rm -rf ${HOME_PATH}/feeds/packages/utils/btrfs-progs
@@ -360,7 +362,7 @@ LIENOL)
   s="mentohust,aliyundrive-webdav,pdnsd-alt,mt"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "19.07" ]]; then
     s="luci-app-unblockneteasemusic,luci-app-vssr,lua-maxminddb"
@@ -422,7 +424,7 @@ OFFICIAL)
   luci-app-netspeedtest,luci-app-netdata,luci-app-passwall2,luci-app-ssr-plus"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "openwrt-19.07" ]]; then
     s="luci-app-vssr,lua-maxminddb,luci-app-natter,natter,luci-app-unblockneteasemusic"
