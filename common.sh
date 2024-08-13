@@ -310,8 +310,6 @@ cd ${HOME_PATH}
 [[ -d "${HOME_PATH}/doc" ]] && rm -rf ${HOME_PATH}/doc
 [[ ! -d "${HOME_PATH}/LICENSES/doc" ]] && mkdir -p "${HOME_PATH}/LICENSES/doc"
 [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p "${HOME_PATH}/build_logo"
-[[ -d "${HOME_PATH}/LICENSES/doc" ]] && echo "true" || echo "false"
-[[ -d "${HOME_PATH}/build_logo" ]] && echo "true" || echo "false"
 
 git pull
 
@@ -564,8 +562,8 @@ if [[ -n "${ZZZ_PATH}" ]]; then
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
     echo "3333"
-    ls -l /home/runner/work/build-actions/build-actions/openwrt/package
-    ls -l ${HOME_PATH}
+    [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]] && echo "LICENSES/doc/config_generates true" || echo "config_generates false"
+    [[ -d "/home/runner/work/build-actions/build-actions/openwrt/package" ]] && echo "openwrt/package true" || echo "openwrt/package false"
     ls -l ${GENE_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
