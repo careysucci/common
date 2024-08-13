@@ -562,9 +562,9 @@ if [[ -n "${ZZZ_PATH}" ]]; then
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
     echo "3333"
-    [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]] && echo "LICENSES/doc/config_generates true" || echo "config_generates false"
+    [[ -f "${GENE_PATH}" ]] && echo "LICENSES/doc/config_generates true" || echo "config_generates false"
     [[ -d "/home/runner/work/build-actions/build-actions/openwrt/package" ]] && echo "openwrt/package true" || echo "openwrt/package false"
-    ls -l ${GENE_PATH}
+    ls ${GENE_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
   sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
