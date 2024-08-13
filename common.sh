@@ -310,8 +310,8 @@ cd ${HOME_PATH}
 [[ -d "${HOME_PATH}/doc" ]] && rm -rf ${HOME_PATH}/doc
 [[ ! -d "${HOME_PATH}/LICENSES/doc" ]] && mkdir -p "${HOME_PATH}/LICENSES/doc"
 [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p "${HOME_PATH}/build_logo"
-echo ls -l ${HOME_PATH}/LICENSES/doc
-echo ls -l ${HOME_PATH}/build_logo
+[[ -d "${HOME_PATH}/LICENSES/doc" ]] && echo "true" || echo "false"
+[[ -d "${HOME_PATH}/build_logo" ]] && echo "true" || echo "false"
 
 git pull
 
