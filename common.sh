@@ -318,7 +318,7 @@ cat feeds.conf.default|awk '!/^#/'|awk '!/^$/'|awk '!a[$1" "$2]++{print}' >uniq.
 mv -f uniq.conf feeds.conf.default
 
 # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
-# src-git danshui1 https://github.com/careysucci/openwrt-package.git;${SOURCE}
+# src-git danshui1 https://github.com/281677160/openwrt-package.git;${SOURCE}
 cat >>"feeds.conf.default" <<-EOF
 src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
@@ -326,11 +326,11 @@ src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
 ./scripts/feeds update -a
 
-# if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
-#   echo "src-git danshui2 https://github.com/careysucci/openwrt-package.git;Theme2" >> "feeds.conf.default"
-# else
-#   echo "src-git danshui2 https://github.com/careysucci/openwrt-package.git;Theme1" >> "feeds.conf.default"
-# fi
+if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
+  echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
+else
+  echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
+fi
 # adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-msd_lite,msd_lite,
 # luci-app-smartdns,smartdns,
 z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
@@ -563,8 +563,8 @@ if [[ -n "${ZZZ_PATH}" ]]; then
   else
     echo "3333"
     ls -l /home/runner/work/build-actions/build-actions/openwrt/package
-    ls -l ${GENE_PATH}
     ls -l ${HOME_PATH}
+    ls -l ${GENE_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
   sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
