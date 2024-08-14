@@ -324,9 +324,7 @@ src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
 src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
-./scripts/feeds update -a && rm -rf feeds/luci/applications/luci-app-mosdns
-rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-rm -rf feeds/packages/utils/v2dat
+./scripts/feeds update -a
 
 # if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
 #   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
@@ -509,6 +507,7 @@ fi
 ./scripts/feeds update danshui2
 
 cp -Rf ${HOME_PATH}/feeds.conf.default ${HOME_PATH}/LICENSES/doc/uniq.conf
+echo "completed 11111"
 }
 
 
@@ -528,7 +527,10 @@ fi
 Settings_path="$(find "${HOME_PATH}/package" -type d -name "default-settings")"
 if [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "2" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings2 ${HOME_PATH}/package/default-settings
+  echo "2224444"
+  ls -l ${HOME_PATH}/package/default-settings/Makefile
   [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" ${HOME_PATH}/package/default-settings/Makefile
+  echo "111111"
 elif [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "1" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings1 ${HOME_PATH}/package/default-settings
 fi
@@ -808,9 +810,7 @@ mv -f uniq.conf feeds.conf.default
 sed -i 's@.*danshui*@#&@g' "feeds.conf.default"
 sed -i 's@.*src-git lienol*@#&@g' "feeds.conf.default"
 sed -i 's@.*src-git other*@#&@g' "feeds.conf.default"
-./scripts/feeds update -a && rm -rf feeds/luci/applications/luci-app-mosdns
-rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-rm -rf feeds/packages/utils/v2dat
+./scripts/feeds update -a
 sed -i 's/^#\(.*danshui\)/\1/' "feeds.conf.default"
 sed -i 's/^#\(.*src-git lienol\)/\1/' "feeds.conf.default"
 sed -i 's/^#\(.*src-git other\)/\1/' "feeds.conf.default"
