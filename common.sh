@@ -408,21 +408,7 @@ IMMORTALWRT)
   done
 ;;
 OFFICIAL)
-  # s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
-  s="autocore,base-files,bash,block-mount,busybox,ca-bundle,coremark,curl,dnsmasq-full,dropbear, \
-  ds-lite,e2fsprogs,fdisk,firewall4,fstools,grub2-bios-setup,htop,kmod-8139cp,kmod-8139too, \
-  kmod-alx,kmod-amazon-ena,kmod-amd-xgbe,kmod-bnx2,kmod-bnx2x,kmod-button-hotplug,kmod-drm-amdgpu, \
-  kmod-drm-i915,kmod-e1000,kmod-e1000e,kmod-forcedeth,kmod-fs-vfat,kmod-i40e,kmod-iavf,kmod-igb, \
-  kmod-igbvf,kmod-igc,kmod-ixgbe,kmod-ixgbevf,kmod-lib-zstd,kmod-mlx4-core,kmod-mlx5-core, \
-  kmod-mmc,kmod-pcnet32,kmod-phy-broadcom,kmod-r8101,kmod-r8125,kmod-r8168,kmod-sdhci, \
-  kmod-tcp-bbr,kmod-tg3,kmod-tulip,kmod-usb-hid,kmod-vmxnet3,libc,libgcc,libustream-mbedtls, \
-  lm-sensors-detect,logd,lsblk,luci-app-advancedplus,luci-app-autoreboot,luci-app-fan, \
-  luci-app-fileassistant,luci-app-firewall,luci-app-opkg,luci-app-upnp,luci-app-wizard, \
-  luci-base,luci-compat,luci-lib-fs,luci-lib-ipkg,mkf2fs,mtd,nano,netifd,odhcp6c, \
-  odhcpd-ipv6only,openssh-sftp-server,opkg,partx-utils,pciutils,ppp,ppp-mod-pppoe, \
-  procd,procd-seccomp,resolveip,swconfig,uci,uclient-fetch,urandom-seed,urngd,usbutils, \
-  wget-ssl,zram-swap,luci-app-diskman,luci-app-wrtbwmon,btop,luci-app-eqosplus,qemu-ga, \
-  luci-app-netspeedtest,luci-app-netdata,luci-app-passwall2,luci-app-ssr-plus"
+  s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
   c=(${s//,/ })
   for i in ${c[@]}; do \
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
@@ -799,10 +785,10 @@ cd ${HOME_PATH}
 find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
 sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
 if [[ "${PassWall_luci_branch}" == "1" ]]; then
-  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
+  # echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
   echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 else
-  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
+  # echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
   echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 fi
 
