@@ -324,7 +324,9 @@ src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
 src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
-./scripts/feeds update -a
+./scripts/feeds update -a && rm -rf feeds/luci/applications/luci-app-mosdns
+rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+rm -rf feeds/packages/utils/v2dat
 
 # if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
 #   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
@@ -820,7 +822,9 @@ mv -f uniq.conf feeds.conf.default
 sed -i 's@.*danshui*@#&@g' "feeds.conf.default"
 sed -i 's@.*src-git lienol*@#&@g' "feeds.conf.default"
 sed -i 's@.*src-git other*@#&@g' "feeds.conf.default"
-./scripts/feeds update -a
+./scripts/feeds update -a && rm -rf feeds/luci/applications/luci-app-mosdns
+rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+rm -rf feeds/packages/utils/v2dat
 sed -i 's/^#\(.*danshui\)/\1/' "feeds.conf.default"
 sed -i 's/^#\(.*src-git lienol\)/\1/' "feeds.conf.default"
 sed -i 's/^#\(.*src-git other\)/\1/' "feeds.conf.default"
