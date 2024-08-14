@@ -562,8 +562,10 @@ if [[ -n "${ZZZ_PATH}" ]]; then
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
     echo "3333"
-    ls /home/runner/work/build-actions/build-actions/openwrt
+    ls /home/runner/work/build-actions/build-actions/openwrt/package
+    echo "44444"
     ls -l ${HOME_PATH}
+    echo "4445555"
     ls -l ${GENE_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
