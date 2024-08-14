@@ -336,12 +336,12 @@ fi
 z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
 luci-theme-rosy,luci-theme-darkmatter,luci-theme-infinityfreedom,luci-theme-design,luci-app-design-config, \
 luci-theme-bootstrap-mod,luci-theme-freifunk-generic,luci-theme-opentomato,luci-theme-kucat, \
-luci-app-eqos,adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-wol,luci-app-openclash, \
-luci-app-gost,gost,luci-app-smartdns,smartdns,luci-app-wizard,luci-app-msd_lite,msd_lite, \
-luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata"
+luci-app-eqos,luci-app-wol,luci-app-openclash,kmod-ixgbe,kmod-ixgbevf, \
+luci-app-gost,gost,luci-app-wizard,nano,dnsmasq-full,dropbear \
+luci-app-ssr-plus,*luci-app-passwall2,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata,"
 t=(${z//,/ })
 for x in ${t[@]}; do \
-  find . -type d -name "${x}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+  find . -type d -name "${x}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
 done
 
 case "${SOURCE_CODE}" in
@@ -349,7 +349,7 @@ COOLSNOWWOLF)
   s="mentohust"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ -d "${HOME_PATH}/build/common/Share/btrfs-progs" ]]; then
     rm -rf ${HOME_PATH}/feeds/packages/utils/btrfs-progs
@@ -360,7 +360,7 @@ LIENOL)
   s="mentohust,aliyundrive-webdav,pdnsd-alt,mt"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "19.07" ]]; then
     s="luci-app-unblockneteasemusic,luci-app-vssr,lua-maxminddb"
@@ -422,7 +422,7 @@ OFFICIAL)
   luci-app-netspeedtest,luci-app-netdata,luci-app-passwall2,luci-app-ssr-plus"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "openwrt-19.07" ]]; then
     s="luci-app-vssr,lua-maxminddb,luci-app-natter,natter,luci-app-unblockneteasemusic"
@@ -562,9 +562,9 @@ if [[ -n "${ZZZ_PATH}" ]]; then
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
     echo "3333"
-    [[ -f "${GENE_PATH}" ]] && echo "LICENSES/doc/config_generates true" || echo "config_generates false"
-    [[ -d "/home/runner/work/build-actions/build-actions/openwrt/package" ]] && echo "openwrt/package true" || echo "openwrt/package false"
-    ls ${GENE_PATH}
+    ls /home/runner/work/build-actions/build-actions/openwrt
+    ls -l ${HOME_PATH}
+    ls -l ${GENE_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
   sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
