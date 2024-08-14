@@ -507,7 +507,6 @@ fi
 ./scripts/feeds update danshui2
 
 cp -Rf ${HOME_PATH}/feeds.conf.default ${HOME_PATH}/LICENSES/doc/uniq.conf
-echo "completed 11111"
 }
 
 
@@ -527,10 +526,8 @@ fi
 Settings_path="$(find "${HOME_PATH}/package" -type d -name "default-settings")"
 if [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "2" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings2 ${HOME_PATH}/package/default-settings
-  echo "2224444"
   ls -l ${HOME_PATH}/package/default-settings/Makefile
   [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" ${HOME_PATH}/package/default-settings/Makefile
-  echo "111111"
 elif [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "1" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings1 ${HOME_PATH}/package/default-settings
 fi
@@ -560,10 +557,11 @@ echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
 sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
 echo "luciversion    = \"${LUCI_EDITION}\"" >> /usr/lib/lua/luci/version.lua
 sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
-# echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
 echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
 fi
+# echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
+echo "111111"
 
 # 增加一些应用
 cp -Rf ${HOME_PATH}/build/common/custom/default-setting "${DEFAULT_PATH}"
@@ -596,6 +594,7 @@ fi
 [[ -n "${features_file}" ]] && sed -i "s?FEATURES+=.*?FEATURES+=targz?g" "${features_file}"
 sed -i '/DISTRIB_SOURCECODE/d' "${REPAIR_PATH}"
 echo -e "\nDISTRIB_SOURCECODE='${SOURCE}_${LUCI_EDITION}'" >> "${REPAIR_PATH}" && sed -i '/^\s*$/d' "${REPAIR_PATH}"
+echo "222222"
 
 # 给固件保留配置更新固件的保留项目
 if [[ -z "$(grep "background" ${KEEPD_PATH})" ]]; then
@@ -654,6 +653,7 @@ else
     fi
   done
 fi
+echo "333333"
 
 # files大法，设置固件无烦恼
 if [ -n "$(ls -A "${BUILD_PATH}/patches" 2>/dev/null)" ]; then
