@@ -526,7 +526,6 @@ fi
 Settings_path="$(find "${HOME_PATH}/package" -type d -name "default-settings")"
 if [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "2" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings2 ${HOME_PATH}/package/default-settings
-  ls -l ${HOME_PATH}/package/default-settings/Makefile
   [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" ${HOME_PATH}/package/default-settings/Makefile
 elif [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "1" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/default-settings1 ${HOME_PATH}/package/default-settings
@@ -561,7 +560,6 @@ echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
 fi
 # echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
-echo "111111"
 
 # 增加一些应用
 cp -Rf ${HOME_PATH}/build/common/custom/default-setting "${DEFAULT_PATH}"
@@ -594,7 +592,6 @@ fi
 [[ -n "${features_file}" ]] && sed -i "s?FEATURES+=.*?FEATURES+=targz?g" "${features_file}"
 sed -i '/DISTRIB_SOURCECODE/d' "${REPAIR_PATH}"
 echo -e "\nDISTRIB_SOURCECODE='${SOURCE}_${LUCI_EDITION}'" >> "${REPAIR_PATH}" && sed -i '/^\s*$/d' "${REPAIR_PATH}"
-echo "222222"
 
 # 给固件保留配置更新固件的保留项目
 if [[ -z "$(grep "background" ${KEEPD_PATH})" ]]; then
@@ -641,19 +638,19 @@ esac
 
 source ${HOME_PATH}/build/common/Share/19.07/netsupport.sh
 
+# 不需要samba
 [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]] && rm -rf ${HOME_PATH}/build/common/Share/luci-app-samba4
-amba4="$(find . -type d -name 'luci-app-samba4')"
-autosam="$(find . -type d -name 'autosamba')"
-if [[ -z "${amba4}" ]] && [[ -n "${autosam}" ]]; then
-  for X in "$(find . -type d -name 'autosamba')/Makefile"; do sed -i "s?+luci-app-samba4?+luci-app-samba?g" "$X"; done
-else
-  for X in "$(find . -type d -name 'autosamba')/Makefile"; do
-    if [[ `grep -c "+luci-app-samba4" $X` -eq '0' ]]; then
-      sed -i "s?+luci-app-samba?+luci-app-samba4?g" "$X"
-    fi
-  done
-fi
-echo "333333"
+# amba4="$(find . -type d -name 'luci-app-samba4')"
+# autosam="$(find . -type d -name 'autosamba')"
+# if [[ -z "${amba4}" ]] && [[ -n "${autosam}" ]]; then
+#   for X in "$(find . -type d -name 'autosamba')/Makefile"; do sed -i "s?+luci-app-samba4?+luci-app-samba?g" "$X"; done
+# else
+#   for X in "$(find . -type d -name 'autosamba')/Makefile"; do
+#     if [[ `grep -c "+luci-app-samba4" $X` -eq '0' ]]; then
+#       sed -i "s?+luci-app-samba?+luci-app-samba4?g" "$X"
+#     fi
+#   done
+# fi
 
 # files大法，设置固件无烦恼
 if [ -n "$(ls -A "${BUILD_PATH}/patches" 2>/dev/null)" ]; then
