@@ -332,14 +332,12 @@ EOF
 #   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
 # fi
 
-# adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-msd_lite,msd_lite,
-# luci-app-smartdns,smartdns,
 z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
 luci-theme-rosy,luci-theme-darkmatter,luci-theme-infinityfreedom,luci-theme-design,luci-app-design-config, \
 luci-theme-bootstrap-mod,luci-theme-freifunk-generic,luci-theme-opentomato,luci-theme-kucat, \
-luci-app-eqos,luci-app-wol,luci-app-openclash,kmod-ixgbe,kmod-ixgbevf, \
-luci-app-gost,gost,luci-app-wizard,nano,dnsmasq-full,dropbear \
-luci-app-ssr-plus,*luci-app-passwall2,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata,"
+luci-app-eqos,adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-wol,luci-app-openclash, \
+luci-app-gost,gost,luci-app-smartdns,smartdns,luci-app-wizard,luci-app-msd_lite,msd_lite, \
+luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata"
 t=(${z//,/ })
 for x in ${t[@]}; do \
   find . -type d -name "${x}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
@@ -502,6 +500,21 @@ fi
 if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/rust ${HOME_PATH}/feeds/packages/lang/rust
 fi
+
+if [[ ! -d "${HOME_PATH}/feeds/package/luci-app-diskman" ]]; then
+  mkdir -p ${HOME_PATH}/feeds/package/luci-app-diskman
+else
+  rm -rf ${HOME_PATH}/feeds/package/luci-app-diskman
+fi
+# 下载diskman的Makefile文件
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/feeds/package/luci-app-diskman/Makefile
+
+if [[ ! -d "${HOME_PATH}/feeds/package/parted" ]]
+  mkdir -p ${HOME_PATH}/feeds/package/parted
+else
+  rm -rf ${HOME_PATH}/feeds/package/parted
+fi
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/feeds/package/parted/Makefile
 
 [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf ${HOME_PATH}/build/common/Share/packr ${HOME_PATH}/feeds/packages/devel/packr
 ./scripts/feeds update danshui2
@@ -784,11 +797,11 @@ cd ${HOME_PATH}
 find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
 sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
 if [[ "${PassWall_luci_branch}" == "1" ]]; then
-  # echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
-  echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
+  # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 else
-  # echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
-  echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
+  # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 fi
 
 # openclash
