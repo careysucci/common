@@ -850,10 +850,8 @@ else
   /bin/bash zh-cn.sh && rm -rf zh-cn.sh
 fi
 ./scripts/feeds install -a > /dev/null 2>&1
-echo "3333", grep -i -E "luci-app-openclash" .config
 # 使用自定义配置文件
 [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
-echo "33444", grep -i -E "luci-app-openclash" .config
 }
 
 
