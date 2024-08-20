@@ -323,6 +323,8 @@ cat >>"feeds.conf.default" <<-EOF
 src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
 src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
+src-git OpenClash https://github.com/vernesong/OpenClash.git;master
+
 EOF
 ./scripts/feeds update -a
 
@@ -797,6 +799,15 @@ else
   mkdir -p ${HOME_PATH}/package/parted
 fi
 wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/package/parted/Makefile
+
+# speedtest
+if [[ ! -d "${HOME_PATH}/package/netspeedtest" ]]; then
+  mkdir -p ${HOME_PATH}/package/netspeedtest
+else
+  rm -rf ${HOME_PATH}/package/netspeedtest
+  mkdir -p ${HOME_PATH}/package/netspeedtest
+fi
+git clone https://github.com/sirpdboy/netspeedtest.git ${HOME_PATH}/package/netspeedtest
 
 # passwall
 find . -type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' | xargs -i rm -rf {}
