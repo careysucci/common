@@ -558,7 +558,6 @@ if [[ -n "${ZZZ_PATH}" ]]; then
   fi
 
   if [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]]; then
-    echo "111"
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
     echo "3333"
