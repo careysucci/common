@@ -829,6 +829,7 @@ if [[ "${OpenClash_branch}" == "1" ]]; then
 else
   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >> "feeds.conf.default"
   echo "OpenClash_branch=master" >> ${GITHUB_ENV}
+  git clone https://github.com/vernesong/OpenClash.git ${HOME_PATH}/package/OpenClash
 fi
 
 cat feeds.conf.default|awk '!/^#/'|awk '!/^$/'|awk '!a[$1" "$2]++{print}' >uniq.conf
