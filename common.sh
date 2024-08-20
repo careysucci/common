@@ -501,22 +501,6 @@ if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/rust ${HOME_PATH}/feeds/packages/lang/rust
 fi
 
-# 检查diskman目录是否存在，不存在时创建目录
-if [[ ! -d "${HOME_PATH}/feeds/package/luci-app-diskman" ]]; then
-  mkdir -p ${HOME_PATH}/feeds/package/luci-app-diskman
-else
-  rm -rf ${HOME_PATH}/feeds/package/luci-app-diskman
-fi
-# 下载diskman的Makefile文件
-wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/feeds/package/luci-app-diskman/Makefile
-
-# diskman依赖库
-if [[ ! -d "${HOME_PATH}/feeds/package/parted" ]]; then
-  mkdir -p ${HOME_PATH}/feeds/package/parted
-else
-  rm -rf ${HOME_PATH}/feeds/package/parted
-fi
-wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/feeds/package/parted/Makefile
 
 [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf ${HOME_PATH}/build/common/Share/packr ${HOME_PATH}/feeds/packages/devel/packr
 ./scripts/feeds update danshui2
@@ -795,14 +779,31 @@ cd ${HOME_PATH}
 source $BUILD_PATH/$DIY_PART_SH
 cd ${HOME_PATH}
 
+# 检查diskman目录是否存在，不存在时创建目录
+if [[ ! -d "${HOME_PATH}/feeds/package/luci-app-diskman" ]]; then
+  mkdir -p ${HOME_PATH}/feeds/package/luci-app-diskman
+else
+  rm -rf ${HOME_PATH}/feeds/package/luci-app-diskman
+fi
+# 下载diskman的Makefile文件
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/feeds/package/luci-app-diskman/Makefile
+
+# diskman依赖库
+if [[ ! -d "${HOME_PATH}/feeds/package/parted" ]]; then
+  mkdir -p ${HOME_PATH}/feeds/package/parted
+else
+  rm -rf ${HOME_PATH}/feeds/package/parted
+fi
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/feeds/package/parted/Makefile
+
 # passwall
-find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
+find . -type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' | xargs -i rm -rf {}
 sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
 if [[ "${PassWall_luci_branch}" == "1" ]]; then
-  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
+  echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
   # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 else
-  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
+  echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
   # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 fi
 
