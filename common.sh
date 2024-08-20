@@ -326,13 +326,12 @@ src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
 ./scripts/feeds update -a
 
-if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
-  echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
-else
-  echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
-fi
-# adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-msd_lite,msd_lite,
-# luci-app-smartdns,smartdns,
+# if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
+#   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
+# else
+#   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
+# fi
+
 z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
 luci-theme-rosy,luci-theme-darkmatter,luci-theme-infinityfreedom,luci-theme-design,luci-app-design-config, \
 luci-theme-bootstrap-mod,luci-theme-freifunk-generic,luci-theme-opentomato,luci-theme-kucat, \
@@ -341,7 +340,7 @@ luci-app-gost,gost,luci-app-smartdns,smartdns,luci-app-wizard,luci-app-msd_lite,
 luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata"
 t=(${z//,/ })
 for x in ${t[@]}; do \
-  find . -type d -name "${x}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+  find . -type d -name "${x}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
 done
 
 case "${SOURCE_CODE}" in
@@ -349,7 +348,7 @@ COOLSNOWWOLF)
   s="mentohust"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ -d "${HOME_PATH}/build/common/Share/btrfs-progs" ]]; then
     rm -rf ${HOME_PATH}/feeds/packages/utils/btrfs-progs
@@ -360,7 +359,7 @@ LIENOL)
   s="mentohust,aliyundrive-webdav,pdnsd-alt,mt"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "19.07" ]]; then
     s="luci-app-unblockneteasemusic,luci-app-vssr,lua-maxminddb"
@@ -405,24 +404,10 @@ IMMORTALWRT)
   done
 ;;
 OFFICIAL)
-  # s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
-  s="autocore,base-files,bash,block-mount,busybox,ca-bundle,coremark,curl,dnsmasq-full,dropbear, \
-  ds-lite,e2fsprogs,fdisk,firewall4,fstools,grub2-bios-setup,htop,kmod-8139cp,kmod-8139too, \
-  kmod-alx,kmod-amazon-ena,kmod-amd-xgbe,kmod-bnx2,kmod-bnx2x,kmod-button-hotplug,kmod-drm-amdgpu, \
-  kmod-drm-i915,kmod-e1000,kmod-e1000e,kmod-forcedeth,kmod-fs-vfat,kmod-i40e,kmod-iavf,kmod-igb, \
-  kmod-igbvf,kmod-igc,kmod-ixgbe,kmod-ixgbevf,kmod-lib-zstd,kmod-mlx4-core,kmod-mlx5-core, \
-  kmod-mmc,kmod-pcnet32,kmod-phy-broadcom,kmod-r8101,kmod-r8125,kmod-r8168,kmod-sdhci, \
-  kmod-tcp-bbr,kmod-tg3,kmod-tulip,kmod-usb-hid,kmod-vmxnet3,libc,libgcc,libustream-mbedtls, \
-  lm-sensors-detect,logd,lsblk,luci-app-advancedplus,luci-app-autoreboot,luci-app-fan, \
-  luci-app-fileassistant,luci-app-firewall,luci-app-opkg,luci-app-upnp,luci-app-wizard, \
-  luci-base,luci-compat,luci-lib-fs,luci-lib-ipkg,mkf2fs,mtd,nano,netifd,odhcp6c, \
-  odhcpd-ipv6only,openssh-sftp-server,opkg,partx-utils,pciutils,ppp,ppp-mod-pppoe, \
-  procd,procd-seccomp,resolveip,swconfig,uci,uclient-fetch,urandom-seed,urngd,usbutils, \
-  wget-ssl,zram-swap,luci-app-diskman,luci-app-wrtbwmon,btop,luci-app-eqosplus,qemu-ga, \
-  luci-app-netspeedtest,luci-app-netdata,luci-app-passwall2,luci-app-ssr-plus"
+  s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
   c=(${s//,/ })
   for i in ${c[@]}; do \
-    find . -type d -name "${i}" |grep -v 'danshui\|small\|freifunk\|danshui1\|passwall3' |xargs -i rm -rf {}; \
+    find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "openwrt-19.07" ]]; then
     s="luci-app-vssr,lua-maxminddb,luci-app-natter,natter,luci-app-unblockneteasemusic"
@@ -504,8 +489,6 @@ rm -rf ${HOME_PATH}/feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${HOME_PATH}/feeds/packages/lang/golang
 
 if [[ -d "${HOME_PATH}/feeds/danshui1/relevance/shadowsocks-libev" ]]; then
-  rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd*,miniupnpd-iptables,wireless-regdb}
-  rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
   rm -rf ${HOME_PATH}/feeds/packages/net/shadowsocks-libev
   mv -f feeds/danshui1/relevance/shadowsocks-libev ${HOME_PATH}/feeds/packages/net/shadowsocks-libev
 fi
@@ -517,6 +500,7 @@ fi
 if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
   cp -Rf ${HOME_PATH}/build/common/Share/rust ${HOME_PATH}/feeds/packages/lang/rust
 fi
+
 
 [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf ${HOME_PATH}/build/common/Share/packr ${HOME_PATH}/feeds/packages/devel/packr
 ./scripts/feeds update danshui2
@@ -560,10 +544,6 @@ if [[ -n "${ZZZ_PATH}" ]]; then
   if [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]]; then
     cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
   else
-    echo "3333"
-    [[ -f "${GENE_PATH}" ]] && echo "LICENSES/doc/config_generates true" || echo "config_generates false"
-    [[ -d "/home/runner/work/build-actions/build-actions/openwrt/package" ]] && echo "openwrt/package true" || echo "openwrt/package false"
-    ls ${GENE_PATH}
     cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
   fi
   sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
@@ -575,10 +555,10 @@ echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
 sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
 echo "luciversion    = \"${LUCI_EDITION}\"" >> /usr/lib/lua/luci/version.lua
 sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
-# echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
 echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
 fi
+# echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
 
 # 增加一些应用
 cp -Rf ${HOME_PATH}/build/common/custom/default-setting "${DEFAULT_PATH}"
@@ -657,18 +637,19 @@ esac
 
 source ${HOME_PATH}/build/common/Share/19.07/netsupport.sh
 
+# 不需要samba
 [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]] && rm -rf ${HOME_PATH}/build/common/Share/luci-app-samba4
-amba4="$(find . -type d -name 'luci-app-samba4')"
-autosam="$(find . -type d -name 'autosamba')"
-if [[ -z "${amba4}" ]] && [[ -n "${autosam}" ]]; then
-  for X in "$(find . -type d -name 'autosamba')/Makefile"; do sed -i "s?+luci-app-samba4?+luci-app-samba?g" "$X"; done
-else
-  for X in "$(find . -type d -name 'autosamba')/Makefile"; do
-    if [[ `grep -c "+luci-app-samba4" $X` -eq '0' ]]; then
-      sed -i "s?+luci-app-samba?+luci-app-samba4?g" "$X"
-    fi
-  done
-fi
+# amba4="$(find . -type d -name 'luci-app-samba4')"
+# autosam="$(find . -type d -name 'autosamba')"
+# if [[ -z "${amba4}" ]] && [[ -n "${autosam}" ]]; then
+#   for X in "$(find . -type d -name 'autosamba')/Makefile"; do sed -i "s?+luci-app-samba4?+luci-app-samba?g" "$X"; done
+# else
+#   for X in "$(find . -type d -name 'autosamba')/Makefile"; do
+#     if [[ `grep -c "+luci-app-samba4" $X` -eq '0' ]]; then
+#       sed -i "s?+luci-app-samba?+luci-app-samba4?g" "$X"
+#     fi
+#   done
+# fi
 
 # files大法，设置固件无烦恼
 if [ -n "$(ls -A "${BUILD_PATH}/patches" 2>/dev/null)" ]; then
@@ -798,15 +779,34 @@ cd ${HOME_PATH}
 source $BUILD_PATH/$DIY_PART_SH
 cd ${HOME_PATH}
 
+# 检查diskman目录是否存在，不存在时创建目录
+if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
+  mkdir -p ${HOME_PATH}/package/luci-app-diskman
+else
+  rm -rf ${HOME_PATH}/package/luci-app-diskman
+  mkdir -p ${HOME_PATH}/package/luci-app-diskman
+fi
+# 下载diskman的Makefile文件
+wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/package/luci-app-diskman/Makefile
+
+# diskman依赖库
+if [[ ! -d "${HOME_PATH}/package/parted" ]]; then
+  mkdir -p ${HOME_PATH}/package/parted
+else
+  rm -rf ${HOME_PATH}/package/parted
+  mkdir -p ${HOME_PATH}/package/parted
+fi
+wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/package/parted/Makefile
+
 # passwall
-find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
+find . -type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' | xargs -i rm -rf {}
 sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
 if [[ "${PassWall_luci_branch}" == "1" ]]; then
-  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
-  echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+  echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >> "feeds.conf.default"
+  # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 else
-  echo "src-git passwall1 https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
-  echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+  echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
+  # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 fi
 
 # openclash
@@ -1366,7 +1366,8 @@ fi
 if [[ `grep -c "CONFIG_PACKAGE_luci-theme-argon=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   pmg="$(echo "$(date +%M)" | sed 's/^.//g')"
   mkdir -p ${HOME_PATH}/files/www/luci-static/argon/background
-  curl -fsSL https://raw.githubusercontent.com/careysucci/openwrt-package/usb/argon/jpg/${pmg}.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/argon.jpg
+  # curl -fsSL https://raw.githubusercontent.com/careysucci/openwrt-package/usb/argon/jpg/${pmg}.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/argon.jpg
+  curl -fsSL https://raw.githubusercontent.com/careysucci/openwrt-packages/pics/th.jpg -o ${HOME_PATH}/files/www/luci-static/argon/background/argon.jpg
   if [[ $? -ne 0 ]]; then
     echo "拉取文件错误,请检测网络"
     exit 1
