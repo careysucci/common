@@ -780,21 +780,21 @@ source $BUILD_PATH/$DIY_PART_SH
 cd ${HOME_PATH}
 
 # 检查diskman目录是否存在，不存在时创建目录
-if [[ ! -d "${HOME_PATH}/feeds/package/luci-app-diskman" ]]; then
-  mkdir -p ${HOME_PATH}/feeds/package/luci-app-diskman
+if [[ ! -d "${HOME_PATH}package/luci-app-diskman" ]]; then
+  mkdir -p ${HOME_PATH}package/luci-app-diskman
 else
-  rm -rf ${HOME_PATH}/feeds/package/luci-app-diskman
+  rm -rf ${HOME_PATH}package/luci-app-diskman
 fi
 # 下载diskman的Makefile文件
-wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/feeds/package/luci-app-diskman/Makefile
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/package/luci-app-diskman/Makefile
 
 # diskman依赖库
-if [[ ! -d "${HOME_PATH}/feeds/package/parted" ]]; then
-  mkdir -p ${HOME_PATH}/feeds/package/parted
+if [[ ! -d "${HOME_PATH}package/parted" ]]; then
+  mkdir -p ${HOME_PATH}package/parted
 else
-  rm -rf ${HOME_PATH}/feeds/package/parted
+  rm -rf ${HOME_PATH}package/parted
 fi
-wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/feeds/package/parted/Makefile
+wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/package/parted/Makefile
 
 # passwall
 find . -type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' | xargs -i rm -rf {}
