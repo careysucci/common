@@ -784,6 +784,7 @@ if [[ ! -d "${HOME_PATH}package/luci-app-diskman" ]]; then
   mkdir -p ${HOME_PATH}package/luci-app-diskman
 else
   rm -rf ${HOME_PATH}package/luci-app-diskman
+  mkdir -p ${HOME_PATH}package/luci-app-diskman
 fi
 # 下载diskman的Makefile文件
 wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/package/luci-app-diskman/Makefile
@@ -793,6 +794,7 @@ if [[ ! -d "${HOME_PATH}package/parted" ]]; then
   mkdir -p ${HOME_PATH}package/parted
 else
   rm -rf ${HOME_PATH}package/parted
+  mkdir -p ${HOME_PATH}package/parted
 fi
 wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/package/parted/Makefile
 
