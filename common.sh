@@ -208,7 +208,7 @@ fi
 if GIT_TOP_TAGGED=$(git describe --tags 2>/dev/null); then
   echo ${GIT_TOP_TAGGED} >> ${GITHUB_ENV}
 else
-  echo "secret $(TZ=UTC-8 date "+%Y.%m.%d")" >> ${GITHUB_ENV}
+  echo "GIT_TOP_TAGGED=secret $(TZ=UTC-8 date "+%Y.%m.%d")" >> ${GITHUB_ENV}
 fi
 
 # 修改本地文件变量
