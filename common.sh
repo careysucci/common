@@ -323,8 +323,6 @@ cat >>"feeds.conf.default" <<-EOF
 src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
 src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
-src-git OpenClash https://github.com/vernesong/OpenClash.git;master
-
 EOF
 ./scripts/feeds update -a
 
@@ -1255,10 +1253,10 @@ Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
 make defconfig > /dev/null 2>&1
 # 替换掉defconf导致的OpenClash错误的问题
-if [[ `grep -c "CONFIG_FEED_OpenClash=y" ${HOME_PATH}/.config` -eq '1' ]]; then
-  sed -i "s/CONFIG_FEED_OpenClash=y/CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
+if [[ `grep -c `grep -i openclash ${HOME_PATH}/.config` ${HOME_PATH}/.config` -eq '1' ]]; then
+  sed -i "s/`grep -i openclash ${HOME_PATH}/.config`/CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
 fi
-if [[ "${OpenClash_branch}" == "1" &&  `grep -c "CONFIG_FEED_OpenClash=y" ${HOME_PATH}/.config` -eq '0' ]]; then
+if [[ "${OpenClash_branch}" == "1" &&  `grep -c "CONFIG_PACKAGE_luci-app-openclash=y" ${HOME_PATH}/.config` -eq '0' ]]; then
   echo "CONFIG_PACKAGE_luci-app-openclash=y" >> ${HOME_PATH}/.config
 fi
 
