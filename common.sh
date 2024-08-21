@@ -847,7 +847,7 @@ else
   cp -Rf ${HOME_PATH}/build/common/language/zh-cn.sh ${HOME_PATH}/zh-cn.sh
   /bin/bash zh-cn.sh && rm -rf zh-cn.sh
 fi
-./scripts/feeds install -a -f > /dev/null 2>&1
+./scripts/feeds update -a && ./scripts/feeds install -a -f > /dev/null 2>&1
 # 使用自定义配置文件
 [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
 }
