@@ -1253,7 +1253,7 @@ Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
 make defconfig > /dev/null 2>&1
 # 替换掉defconf导致的OpenClash错误的问题
-if [[ `grep -c `grep -i openclash ${HOME_PATH}/.config` ${HOME_PATH}/.config` -eq '1' ]]; then
+if [[ "$(grep -ic 'openclash' ${HOME_PATH}/.config | wc -l)" -eq '1' ]]; then
   sed -i "s/`grep -i openclash ${HOME_PATH}/.config`/CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
 fi
 if [[ "${OpenClash_branch}" == "1" &&  `grep -c "CONFIG_PACKAGE_luci-app-openclash=y" ${HOME_PATH}/.config` -eq '0' ]]; then
