@@ -1515,8 +1515,8 @@ for x in ${k[@]}; do \
   sed -i "/${x}/d" "${HOME_PATH}/build_logo/config.txt"; \
 done
 sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
-}
 echo '777777' $(grep -i -E "openclash" .config)
+}
 
 
 function Make_defconfig() {
