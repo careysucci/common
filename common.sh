@@ -1253,9 +1253,8 @@ function Diy_prevent() {
 cd ${HOME_PATH}
 Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
-echo '555555' $(grep -i -E "openclash" .config)
-make defconfig > /dev/null 2>&1
-echo '555566' $(grep -i -E "openclash" .config)
+# make defconfig > /dev/null 2>&1
+make defconfig
 if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-server=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-vpnd=y" ${HOME_PATH}/.config` -eq '1' ]]; then
     sed -i 's/CONFIG_PACKAGE_luci-app-ipsec-vpnd=y/# CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set/g' ${HOME_PATH}/.config
@@ -1375,7 +1374,6 @@ if [[ `grep -c "CONFIG_PACKAGE_luci-app-dockerman=y" ${HOME_PATH}/.config` -eq '
   echo "# CONFIG_PACKAGE_dockerd is not set" >> ${HOME_PATH}/.config
   echo "# CONFIG_PACKAGE_runc is not set" >> ${HOME_PATH}/.config
 fi
-echo '66666' $(grep -i -E "openclash" .config)
 
 if [[ `grep -c "CONFIG_PACKAGE_luci-theme-argon=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   pmg="$(echo "$(date +%M)" | sed 's/^.//g')"
