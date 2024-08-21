@@ -204,12 +204,6 @@ if [[ -n "${BENDI_VERSION}" ]]; then
   echo "MODIFY_CONFIGURATION=${MODIFY_CONFIGURATION}" >> ${GITHUB_ENV}
   echo "WSL_ROUTEPATH=${WSL_ROUTEPATH}" >> ${GITHUB_ENV}
 fi
-# 获取git最新一个的tag描述
-if GIT_TOP_TAGGED=$(git describe --tags 2>/dev/null); then
-  echo ${GIT_TOP_TAGGED} >> ${GITHUB_ENV}
-else
-  echo "GIT_TOP_TAGGED=secret $(TZ=UTC-8 date "+%Y.%m.%d")" >> ${GITHUB_ENV}
-fi
 
 # 修改本地文件变量
 if [[ -n "${BENDI_VERSION}" ]]; then
@@ -857,9 +851,7 @@ else
 fi
 ./scripts/feeds install -a -f > /dev/null 2>&1
 # 使用自定义配置文件
-echo '11111' $(grep -i -E "openclash" .config)
 [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
-echo '22222' $(grep -i -E "openclash" .config)
 }
 
 
@@ -905,7 +897,6 @@ if [[ -f "${luci_path}" ]] && [[ `grep -c "uci get openclash.config.enable" "${l
   sed -i '/uci -q set openclash.config.enable=0/i\if [[ "\$(uci get openclash.config.enable)" == "0" ]] || [[ -z "\$(uci get openclash.config.enable)" ]]; then' "${luci_path}"
   sed -i '/uci -q commit openclash/a\fi' "${luci_path}"
 fi
-echo '44444' $(grep -i -E "openclash" .config)
 
 if [[ "${Enable_IPV6_function}" == "1" ]]; then
   echo "固件加入IPV6功能"
@@ -1259,11 +1250,12 @@ EOF
 
 
 function Diy_prevent() {
-echo '555555' $(grep -i -E "openclash" .config)
 cd ${HOME_PATH}
 Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
+echo '555555' $(grep -i -E "openclash" .config)
 make defconfig > /dev/null 2>&1
+echo '555566' $(grep -i -E "openclash" .config)
 if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-server=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-vpnd=y" ${HOME_PATH}/.config` -eq '1' ]]; then
     sed -i 's/CONFIG_PACKAGE_luci-app-ipsec-vpnd=y/# CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set/g' ${HOME_PATH}/.config
@@ -1383,6 +1375,7 @@ if [[ `grep -c "CONFIG_PACKAGE_luci-app-dockerman=y" ${HOME_PATH}/.config` -eq '
   echo "# CONFIG_PACKAGE_dockerd is not set" >> ${HOME_PATH}/.config
   echo "# CONFIG_PACKAGE_runc is not set" >> ${HOME_PATH}/.config
 fi
+echo '66666' $(grep -i -E "openclash" .config)
 
 if [[ `grep -c "CONFIG_PACKAGE_luci-theme-argon=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   pmg="$(echo "$(date +%M)" | sed 's/^.//g')"
@@ -1493,7 +1486,6 @@ if [[ `grep -c "CONFIG_TARGET_ROOTFS_EXT4FS=y" ${HOME_PATH}/.config` -eq '1' ]];
     echo "" >> ${HOME_PATH}/CHONGTU
   fi
 fi
-echo '66666' $(grep -i -E "openclash" .config)
 
 cd ${HOME_PATH}
 make defconfig > /dev/null 2>&1
@@ -1515,7 +1507,6 @@ for x in ${k[@]}; do \
   sed -i "/${x}/d" "${HOME_PATH}/build_logo/config.txt"; \
 done
 sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
-echo '777777' $(grep -i -E "openclash" .config)
 }
 
 
