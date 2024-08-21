@@ -204,6 +204,12 @@ if [[ -n "${BENDI_VERSION}" ]]; then
   echo "MODIFY_CONFIGURATION=${MODIFY_CONFIGURATION}" >> ${GITHUB_ENV}
   echo "WSL_ROUTEPATH=${WSL_ROUTEPATH}" >> ${GITHUB_ENV}
 fi
+# 获取git最新一个的tag描述
+if GIT_TOP_TAGGED=$(git describe --tags 2>/dev/null); then
+  echo ${GIT_TOP_TAGGED} >> ${GITHUB_ENV}
+else
+  echo "secret $(TZ=UTC-8 date "+%Y.%m.%d")" >> ${GITHUB_ENV}
+fi
 
 # 修改本地文件变量
 if [[ -n "${BENDI_VERSION}" ]]; then
@@ -553,7 +559,7 @@ cat >> "${ZZZ_PATH}" <<-EOF
 sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
 echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
 sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
-echo "luciversion    = \"${LUCI_EDITION}\"" >> /usr/lib/lua/luci/version.lua
+echo "luciversion    = \"${GIT_TOP_TAGGED}\"" >> /usr/lib/lua/luci/version.lua
 sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
 echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
@@ -564,7 +570,7 @@ fi
 cp -Rf ${HOME_PATH}/build/common/custom/default-setting "${DEFAULT_PATH}"
 sudo chmod +x "${DEFAULT_PATH}"
 sed -i '/exit 0$/d' "${DEFAULT_PATH}"
-sed -i "s?112233?${SOURCE} - ${LUCI_EDITION}?g" "${DEFAULT_PATH}" > /dev/null 2>&1
+sed -i "s?112233?$OpenWrt - ${GIT_TOP_TAGGED}?g" "${DEFAULT_PATH}" > /dev/null 2>&1
 sed -i 's/root:.*/root::0:0:99999:7:::/g' ${FILES_PATH}/etc/shadow
 if [[ `grep -Eoc "admin:.*" ${FILES_PATH}/etc/shadow` -eq '1' ]]; then
   sed -i 's/admin:.*/admin::0:0:99999:7:::/g' ${FILES_PATH}/etc/shadow
@@ -838,9 +844,11 @@ else
   cp -Rf ${HOME_PATH}/build/common/language/zh-cn.sh ${HOME_PATH}/zh-cn.sh
   /bin/bash zh-cn.sh && rm -rf zh-cn.sh
 fi
-./scripts/feeds install -a > /dev/null 2>&1
+./scripts/feeds install -a -f > /dev/null 2>&1
 # 使用自定义配置文件
+echo '11111' $(grep -i -E "openclash" .config)
 [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
+echo '22222' $(grep -i -E "openclash" .config)
 }
 
 
@@ -886,6 +894,7 @@ if [[ -f "${luci_path}" ]] && [[ `grep -c "uci get openclash.config.enable" "${l
   sed -i '/uci -q set openclash.config.enable=0/i\if [[ "\$(uci get openclash.config.enable)" == "0" ]] || [[ -z "\$(uci get openclash.config.enable)" ]]; then' "${luci_path}"
   sed -i '/uci -q commit openclash/a\fi' "${luci_path}"
 fi
+echo '44444' $(grep -i -E "openclash" .config)
 
 if [[ "${Enable_IPV6_function}" == "1" ]]; then
   echo "固件加入IPV6功能"
@@ -1150,7 +1159,7 @@ fi
 function Diy_feeds() {
 echo "正在执行：安装feeds,请耐心等待..."
 cd ${HOME_PATH}
-./scripts/feeds install -a
+./scripts/feeds install -a -f
 
 if [[ ! -f "${HOME_PATH}/staging_dir/host/bin/upx" ]]; then
   cp -Rf /usr/bin/upx ${HOME_PATH}/staging_dir/host/bin/upx
@@ -1239,6 +1248,7 @@ EOF
 
 
 function Diy_prevent() {
+echo '555555' $(grep -i -E "openclash" .config)
 cd ${HOME_PATH}
 Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
@@ -1472,6 +1482,7 @@ if [[ `grep -c "CONFIG_TARGET_ROOTFS_EXT4FS=y" ${HOME_PATH}/.config` -eq '1' ]];
     echo "" >> ${HOME_PATH}/CHONGTU
   fi
 fi
+echo '66666' $(grep -i -E "openclash" .config)
 
 cd ${HOME_PATH}
 make defconfig > /dev/null 2>&1
@@ -1494,6 +1505,7 @@ for x in ${k[@]}; do \
 done
 sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
 }
+echo '777777' $(grep -i -E "openclash" .config)
 
 
 function Make_defconfig() {
@@ -1529,6 +1541,7 @@ echo "TARGET_BOARD=${TARGET_BOARD}" >> ${GITHUB_ENV}
 echo "TARGET_SUBTARGET=${TARGET_SUBTARGET}" >> ${GITHUB_ENV}
 echo "TARGET_PROFILE=${TARGET_PROFILE}" >> ${GITHUB_ENV}
 echo "FIRMWARE_PATH=${FIRMWARE_PATH}" >> ${GITHUB_ENV}
+echo '88888' $(grep -i -E "openclash" .config)
 }
 
 
