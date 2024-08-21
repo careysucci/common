@@ -1253,8 +1253,15 @@ function Diy_prevent() {
 cd ${HOME_PATH}
 Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
-# make defconfig > /dev/null 2>&1
-make defconfig
+make defconfig > /dev/null 2>&1
+# 替换掉defconf导致的OpenClash错误的问题
+if [[ `grep -c "CONFIG_FEED_OpenClash=y" ${HOME_PATH}/.config` -eq '1' ]]; then
+  sed -i "s/CONFIG_FEED_OpenClash=y/CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
+fi
+if [[ "${OpenClash_branch}" == "1" &&  `grep -c "CONFIG_FEED_OpenClash=y" ${HOME_PATH}/.config` -eq '0' ]]; then
+  echo "CONFIG_PACKAGE_luci-app-openclash=y" >> ${HOME_PATH}/.config
+fi
+
 if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-server=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-vpnd=y" ${HOME_PATH}/.config` -eq '1' ]]; then
     sed -i 's/CONFIG_PACKAGE_luci-app-ipsec-vpnd=y/# CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set/g' ${HOME_PATH}/.config
@@ -1541,7 +1548,6 @@ echo "TARGET_BOARD=${TARGET_BOARD}" >> ${GITHUB_ENV}
 echo "TARGET_SUBTARGET=${TARGET_SUBTARGET}" >> ${GITHUB_ENV}
 echo "TARGET_PROFILE=${TARGET_PROFILE}" >> ${GITHUB_ENV}
 echo "FIRMWARE_PATH=${FIRMWARE_PATH}" >> ${GITHUB_ENV}
-echo '88888' $(grep -i -E "openclash" .config)
 }
 
 
