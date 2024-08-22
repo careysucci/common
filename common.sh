@@ -25,7 +25,7 @@ Compte=$(date +%Y年%m月%d号%H时%M分)
 }
 
 function settings_variable() {
-cd ${GITHUB_WORKSPACE}
+cd "${GITHUB_WORKSPACE}" || return
 bash <(curl -fsSL https://raw.githubusercontent.com/careysucci/common/main/custom/first.sh)
 }
 
@@ -106,12 +106,13 @@ KEEP_LATEST="${KEEP_LATEST}"
 EOF
 
 if [[ -n "${BENDI_VERSION}" ]]; then
-  echo "PACKAGING_FIRMWARE_BENDI=${PACKAGING_FIRMWARE}" >> "${start_path}"
-  echo "MODIFY_CONFIGURATION=${MODIFY_CONFIGURATION}" >> "${start_path}"
-  echo "WSL_ROUTEPATH=${WSL_ROUTEPATH}" >> "${start_path}"
+  {
+  echo "PACKAGING_FIRMWARE_BENDI=${PACKAGING_FIRMWARE}"
+  echo "MODIFY_CONFIGURATION=${MODIFY_CONFIGURATION}"
+  echo "WSL_ROUTEPATH=${WSL_ROUTEPATH}"
+  }  >> "${start_path}"
 fi
-
-chmod -R +x ${start_path} && source ${start_path}
+chmod -R +x "${start_path}" && source "${start_path}"
 
 case "${SOURCE_CODE}" in
 COOLSNOWWOLF)
@@ -125,8 +126,13 @@ LIENOL)
   export REPO_URL="https://github.com/Lienol/openwrt"
   export SOURCE="Lienol"
   export SOURCE_OWNER="Lienol's"
-  export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
-  export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+  # export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
+  # export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+  export LUCI_EDITION=${REPO_BRANCH//openwrt-/}
+  DIY_WORK=${LUCI_EDITION//\./}
+  DIY_WORK=${DIY_WORK//\-/}
+  DIY_WORK="${FOLDER_NAME}${DIY_WORK}"
+  export DIY_WORK
 ;;
 IMMORTALWRT)
   if [[ "${REPO_BRANCH}" == "mt798x" ]]; then
@@ -140,8 +146,13 @@ IMMORTALWRT)
     export REPO_URL="https://github.com/immortalwrt/immortalwrt"
     export SOURCE="Immortalwrt"
     export SOURCE_OWNER="ctcgfw's"
-    export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
-    export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+    # export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
+    # export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+    export LUCI_EDITION=${REPO_BRANCH//openwrt-/}
+    DIY_WORK=${LUCI_EDITION//\./}
+    DIY_WORK=${DIY_WORK//\-/}
+    DIY_WORK="${FOLDER_NAME}${DIY_WORK}"
+    export DIY_WORK
   fi
 ;;
 XWRT)
@@ -149,14 +160,23 @@ XWRT)
   export SOURCE="Xwrt"
   export SOURCE_OWNER="ptpt52's"
   export LUCI_EDITION="${REPO_BRANCH}"
-  export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+  # export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+  DIY_WORK=${LUCI_EDITION//\./}
+  DIY_WORK=${DIY_WORK//\-/}
+  DIY_WORK="${FOLDER_NAME}${DIY_WORK}"
+  export DIY_WORK
 ;;
 OFFICIAL)
   export REPO_URL="https://github.com/openwrt/openwrt"
   export SOURCE="Official"
   export SOURCE_OWNER="openwrt's"
-  export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
-  export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+  # export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
+  # export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
+  export LUCI_EDITION=${REPO_BRANCH//openwrt-/}
+  DIY_WORK=${LUCI_EDITION//\./}
+  DIY_WORK=${DIY_WORK//\-/}
+  DIY_WORK="${FOLDER_NAME}${DIY_WORK}"
+  export DIY_WORK
 ;;
 *)
   TIME r "不支持${SOURCE_CODE}此源码，当前只支持COOLSNOWWOLF、LIENOL、IMMORTALWRT、XWRT、OFFICIAL"
@@ -339,7 +359,7 @@ luci-app-eqos,adguardhome,luci-app-adguardhome,mosdns,luci-app-mosdns,luci-app-w
 luci-app-gost,gost,luci-app-smartdns,smartdns,luci-app-wizard,luci-app-msd_lite,msd_lite, \
 luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-geodata"
 t=(${z//,/ })
-for x in ${t[@]}; do \
+for x in "${t[@]}"; do \
   find . -type d -name "${x}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
 done
 
@@ -347,7 +367,7 @@ case "${SOURCE_CODE}" in
 COOLSNOWWOLF)
   s="mentohust"
   c=(${s//,/ })
-  for i in ${c[@]}; do \
+  for i in "${c[@]}"; do \
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ -d "${HOME_PATH}/build/common/Share/btrfs-progs" ]]; then
@@ -358,13 +378,13 @@ COOLSNOWWOLF)
 LIENOL)
   s="mentohust,aliyundrive-webdav,pdnsd-alt,mt"
   c=(${s//,/ })
-  for i in ${c[@]}; do \
+  for i in "${c[@]}"; do \
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "19.07" ]]; then
     s="luci-app-unblockneteasemusic,luci-app-vssr,lua-maxminddb"
     c=(${s//,/ })
-    for i in ${c[@]}; do \
+    for i in "${c[@]}"; do \
       find . -type d -name "${i}" |grep -v 'freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
     done
     if [[ -d "${HOME_PATH}/build/common/Share/libcap" ]]; then
@@ -399,20 +419,20 @@ LIENOL)
 IMMORTALWRT)
   s="luci-app-cifs,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
   c=(${s//,/ })
-  for i in ${c[@]}; do \
+  for i in "${c[@]}"; do \
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
 ;;
 OFFICIAL)
   s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
   c=(${s//,/ })
-  for i in ${c[@]}; do \
+  for i in "${c[@]}"; do \
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
   if [[ "${REPO_BRANCH}" == "openwrt-19.07" ]]; then
     s="luci-app-vssr,lua-maxminddb,luci-app-natter,natter,luci-app-unblockneteasemusic"
     c=(${s//,/ })
-    for i in ${c[@]}; do \
+    for i in "${c[@]}"; do \
       find . -type d -name "${i}" |grep -v 'freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
     done
     if [[ -d "${HOME_PATH}/build/common/Share/libcap" ]]; then
@@ -438,7 +458,7 @@ OFFICIAL)
   if [[ "${REPO_BRANCH}" == "openwrt-21.02" ]]; then
     s="luci-app-vssr,lua-maxminddb,luci-app-natter,natter,luci-app-unblockneteasemusic"
     c=(${s//,/ })
-    for i in ${c[@]}; do \
+    for i in "${c[@]}"; do \
       find . -type d -name "${i}" |grep -v 'freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
     done
     if [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]]; then
@@ -475,7 +495,7 @@ OFFICIAL)
 XWRT)
   s="luci-app-wrtbwmon,wrtbwmon,luci-app-dockerman,docker,dockerd,bcm27xx-userland,luci-app-aliyundrive-webdav,aliyundrive-webdav,aliyundrive-fuse"
   c=(${s//,/ })
-  for i in ${c[@]}; do \
+  for i in "${c[@]}"; do \
     find . -type d -name "${i}" |grep -v 'danshui\|freifunk\|helloworld\|passwall3' |xargs -i rm -rf {}; \
   done
 ;;
@@ -1252,13 +1272,6 @@ cd ${HOME_PATH}
 Diy_IPv6helper
 echo "正在执行：判断插件有否冲突减少编译错误"
 make defconfig > /dev/null 2>&1
-# 替换掉defconf导致的OpenClash错误的问题
-if [[ "$(grep -ic 'openclash' ${HOME_PATH}/.config | wc -l)" -eq 1 ]]; then
-  sed -i "s/^CONFIG_.*openclash/c\CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
-fi
-if [[ "${OpenClash_branch}" == "1" &&  `grep -c "CONFIG_PACKAGE_luci-app-openclash=y" ${HOME_PATH}/.config` -eq '0' ]]; then
-  echo "CONFIG_PACKAGE_luci-app-openclash=y" >> ${HOME_PATH}/.config
-fi
 
 if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-server=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   if [[ `grep -c "CONFIG_PACKAGE_luci-app-ipsec-vpnd=y" ${HOME_PATH}/.config` -eq '1' ]]; then
@@ -1489,6 +1502,13 @@ if [[ `grep -c "CONFIG_TARGET_ROOTFS_EXT4FS=y" ${HOME_PATH}/.config` -eq '1' ]];
     echo "" >> ${HOME_PATH}/CHONGTU
   fi
 fi
+# 替换掉defconf导致的OpenClash错误的问题
+if [[ "$(grep -ic 'openclash' ${HOME_PATH}/.config | wc -l)" -eq 1 ]]; then
+  sed -i "s/^CONFIG_.*openclash/c\CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
+fi
+if [[ "${OpenClash_branch}" == "1" &&  `grep -c "CONFIG_PACKAGE_luci-app-openclash=y" ${HOME_PATH}/.config` -eq '0' ]]; then
+  echo "CONFIG_PACKAGE_luci-app-openclash=y" >> ${HOME_PATH}/.config
+fi
 
 cd ${HOME_PATH}
 make defconfig > /dev/null 2>&1
@@ -1506,7 +1526,7 @@ CONFIG_PACKAGE_kmod-veth=y,CONFIG_PACKAGE_libdevmapper=y,CONFIG_PACKAGE_liblzo=y
 CONFIG_PACKAGE_luci-i18n-dockerman-zh-cn=y,CONFIG_PACKAGE_luci-lib-docker=y,CONFIG_PACKAGE_mount-utils=y,CONFIG_PACKAGE_runc=y,CONFIG_PACKAGE_tini=y,CONFIG_PACKAGE_naiveproxy=y, \
 CONFIG_PACKAGE_samba36-server=y,CONFIG_PACKAGE_samba4-libs=y,CONFIG_PACKAGE_samba4-server=y"
 k=(${d//,/ })
-for x in ${k[@]}; do \
+for x in "${k[@]}"; do \
   sed -i "/${x}/d" "${HOME_PATH}/build_logo/config.txt"; \
 done
 sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
