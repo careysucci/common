@@ -826,6 +826,7 @@ function Diy_zdypartsh() {
   fi
 
   # openclash
+  find . -type d \(-name '*luci-app-openclash*' -o -name '*OpenClash*'\ -print0\) | xargs -0 ls -l {}
   find . -type d \(-name '*luci-app-openclash*' -o -name '*OpenClash*'\ -print0\) | xargs -0 rm -rf {}
   sed -i '/OpenClash/d' "feeds.conf.default"
   if [[ "${OpenClash_branch}" == "1" ]]; then
