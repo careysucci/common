@@ -38,7 +38,7 @@ function Diy_variable() {
   fi
 
   if [[ -n "${INPUTS_REPO_BRANCH}" ]]; then
-    SOURCE_CODE="${SOURCE_CODE}"
+    # SOURCE_CODE="${SOURCE_CODE}"
     REPO_BRANCH="${INPUTS_REPO_BRANCH}"
     CONFIG_FILE="$(echo "${INPUTS_CONFIG_FILE}" | cut -d"/" -f2)"
     CPU_SELECTION="${INPUTS_CPU_SELECTION}"
@@ -48,23 +48,23 @@ function Diy_variable() {
     CACHEWRTBUILD_SWITCH="${INPUTS_CACHEWRTBUILD_SWITCH}"
     UPDATE_FIRMWARE_ONLINE="${INPUTS_UPDATE_FIRMWARE_ONLINE}"
     COMPILATION_INFORMATION="${INPUTS_COMPILATION_INFORMATION}"
-    RETAIN_MINUTE="${RETAIN_MINUTE}"
-    KEEP_LATEST="${KEEP_LATEST}"
+    # RETAIN_MINUTE="${RETAIN_MINUTE}"
+    # KEEP_LATEST="${KEEP_LATEST}"
     echo "SSH_ACTION=${INPUTS_SSH_ACTION}" >>${GITHUB_ENV}
     WAREHOUSE_MAN="${GIT_REPOSITORY##*/}"
   else
-    SOURCE_CODE="${SOURCE_CODE}"
-    REPO_BRANCH="${REPO_BRANCH}"
+    # SOURCE_CODE="${SOURCE_CODE}"
+    # REPO_BRANCH="${REPO_BRANCH}"
+    # CPU_SELECTION="${CPU_SELECTION}"
+    # INFORMATION_NOTICE="${INFORMATION_NOTICE}"
+    # UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
+    # UPLOAD_RELEASE="${UPLOAD_RELEASE}"
+    # CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
+    # UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
+    # COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
+    # RETAIN_MINUTE="${RETAIN_MINUTE}"
+    # KEEP_LATEST="${KEEP_LATEST}"
     CONFIG_FILE="$(echo "${CONFIG_FILE}" | cut -d"/" -f2)"
-    CPU_SELECTION="${CPU_SELECTION}"
-    INFORMATION_NOTICE="${INFORMATION_NOTICE}"
-    UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
-    UPLOAD_RELEASE="${UPLOAD_RELEASE}"
-    CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
-    UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
-    COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
-    RETAIN_MINUTE="${RETAIN_MINUTE}"
-    KEEP_LATEST="${KEEP_LATEST}"
     WAREHOUSE_MAN="${GIT_REPOSITORY##*/}"
   fi
 
@@ -185,44 +185,49 @@ EOF
   esac
 
   export DIY_PART_SH="diy-part.sh"
-  echo "DIY_PART_SH=${DIY_PART_SH}" >>"${GITHUB_ENV}"
-  echo "HOME_PATH=${GITHUB_WORKSPACE}/openwrt" >>${GITHUB_ENV}
-  echo "SOURCE_CODE=${SOURCE_CODE}" >>${GITHUB_ENV}
-  echo "REPO_URL=${REPO_URL}" >>${GITHUB_ENV}
-  echo "REPO_BRANCH=${REPO_BRANCH}" >>${GITHUB_ENV}
-  echo "CONFIG_FILE=${CONFIG_FILE}" >>${GITHUB_ENV}
-  echo "CPU_SELECTION=${CPU_SELECTION}" >>${GITHUB_ENV}
-  echo "INFORMATION_NOTICE=${INFORMATION_NOTICE}" >>${GITHUB_ENV}
-  echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >>${GITHUB_ENV}
-  echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >>${GITHUB_ENV}
-  echo "CACHEWRTBUILD_SWITCH=${CACHEWRTBUILD_SWITCH}" >>${GITHUB_ENV}
-  echo "UPDATE_FIRMWARE_ONLINE=${UPDATE_FIRMWARE_ONLINE}" >>${GITHUB_ENV}
-  echo "COMPILATION_INFORMATION=${COMPILATION_INFORMATION}" >>${GITHUB_ENV}
-  echo "RETAIN_MINUTE=${RETAIN_MINUTE}" >>${GITHUB_ENV}
-  echo "KEEP_LATEST=${KEEP_LATEST}" >>${GITHUB_ENV}
-  echo "WAREHOUSE_MAN=${WAREHOUSE_MAN}" >>${GITHUB_ENV}
-  echo "SOURCE=${SOURCE}" >>${GITHUB_ENV}
-  echo "LUCI_EDITION=${LUCI_EDITION}" >>${GITHUB_ENV}
-  echo "SOURCE_OWNER=${SOURCE_OWNER}" >>${GITHUB_ENV}
-  echo "DIY_WORK=${DIY_WORK}" >>${GITHUB_ENV}
-  echo "svn=${GITHUB_WORKSPACE}/openwrt/build/common/custom/replace_file.sh" >>${GITHUB_ENV}
-  echo "BUILD_PATH=${GITHUB_WORKSPACE}/openwrt/build/${FOLDER_NAME}" >>${GITHUB_ENV}
-  echo "FILES_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files" >>${GITHUB_ENV}
-  echo "REPAIR_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/etc/openwrt_release" >>${GITHUB_ENV}
-  echo "DELETE=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/etc/deletefile" >>${GITHUB_ENV}
-  echo "DEFAULT_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/etc/default-setting" >>${GITHUB_ENV}
-  echo "KEEPD_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/lib/upgrade/keep.d/base-files-essential" >>${GITHUB_ENV}
-  echo "GENE_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/bin/config_generate" >>${GITHUB_ENV}
-  echo "CLEAR_PATH=${GITHUB_WORKSPACE}/openwrt/Clear" >>${GITHUB_ENV}
-  echo "Upgrade_Date=$(date -d "$(date +'%Y-%m-%d %H:%M:%S')" +%s)" >>${GITHUB_ENV}
-  echo "Firmware_Date=$(date +%Y-%m%d-%H%M)" >>${GITHUB_ENV}
-  echo "Compte_Date=$(date +%Y年%m月%d号%H时%M分)" >>${GITHUB_ENV}
-  echo "Tongzhi_Date=$(date +%Y年%m月%d日)" >>${GITHUB_ENV}
-  echo "Gujian_Date=$(date +%m.%d)" >>${GITHUB_ENV}
+  {
+    echo "DIY_PART_SH=${DIY_PART_SH}"
+    echo "HOME_PATH=${GITHUB_WORKSPACE}/openwrt"
+    echo "SOURCE_CODE=${SOURCE_CODE}"
+    echo "REPO_URL=${REPO_URL}"
+    echo "REPO_BRANCH=${REPO_BRANCH}"
+    echo "CONFIG_FILE=${CONFIG_FILE}"
+    echo "CPU_SELECTION=${CPU_SELECTION}"
+    echo "INFORMATION_NOTICE=${INFORMATION_NOTICE}"
+    echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}"
+    echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}"
+    echo "CACHEWRTBUILD_SWITCH=${CACHEWRTBUILD_SWITCH}"
+    echo "UPDATE_FIRMWARE_ONLINE=${UPDATE_FIRMWARE_ONLINE}"
+    echo "COMPILATION_INFORMATION=${COMPILATION_INFORMATION}"
+    echo "RETAIN_MINUTE=${RETAIN_MINUTE}"
+    echo "KEEP_LATEST=${KEEP_LATEST}"
+    echo "WAREHOUSE_MAN=${WAREHOUSE_MAN}"
+    echo "SOURCE=${SOURCE}"
+    echo "LUCI_EDITION=${LUCI_EDITION}"
+    echo "SOURCE_OWNER=${SOURCE_OWNER}"
+    echo "DIY_WORK=${DIY_WORK}"
+    echo "svn=${GITHUB_WORKSPACE}/openwrt/build/common/custom/replace_file.sh"
+    echo "BUILD_PATH=${GITHUB_WORKSPACE}/openwrt/build/${FOLDER_NAME}"
+    echo "FILES_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files"
+    echo "REPAIR_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/etc/openwrt_release"
+    echo "DELETE=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/etc/deletefile"
+    echo "DEFAULT_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/etc/default-setting"
+    echo "KEEPD_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/lib/upgrade/keep.d/base-files-essential"
+    echo "GENE_PATH=${GITHUB_WORKSPACE}/openwrt/package/base-files/files/bin/config_generate"
+    echo "CLEAR_PATH=${GITHUB_WORKSPACE}/openwrt/Clear"
+    echo "Upgrade_Date=$(date -d "$(date +'%Y-%m-%d %H:%M:%S')" +%s)"
+    echo "Firmware_Date=$(date +%Y-%m%d-%H%M)"
+    echo "Compte_Date=$(date +%Y年%m月%d号%H时%M分)"
+    echo "Tongzhi_Date=$(date +%Y年%m月%d日)"
+    echo "Gujian_Date=$(date +%m.%d)"
+  } >>"${GITHUB_ENV}"
+
   if [[ -n "${BENDI_VERSION}" ]]; then
-    echo "PACKAGING_FIRMWARE_BENDI=${PACKAGING_FIRMWARE}" >>${GITHUB_ENV}
-    echo "MODIFY_CONFIGURATION=${MODIFY_CONFIGURATION}" >>${GITHUB_ENV}
-    echo "WSL_ROUTEPATH=${WSL_ROUTEPATH}" >>${GITHUB_ENV}
+    {
+      echo "PACKAGING_FIRMWARE_BENDI=${PACKAGING_FIRMWARE}"
+      echo "MODIFY_CONFIGURATION=${MODIFY_CONFIGURATION}"
+      echo "WSL_ROUTEPATH=${WSL_ROUTEPATH}"
+    } >>"${GITHUB_ENV}"
   fi
 
   # 修改本地文件变量
@@ -324,14 +329,14 @@ function svn_co() {
 function Diy_checkout() {
   # 下载源码后，进行源码微调和增加插件源
   cd "${HOME_PATH}" || exit 1
-  [[ -d "${HOME_PATH}/doc" ]] && rm -rf ${HOME_PATH}/doc
+  [[ -d "${HOME_PATH}/doc" ]] && rm -rf "${HOME_PATH}/doc"
   [[ ! -d "${HOME_PATH}/LICENSES/doc" ]] && mkdir -p "${HOME_PATH}/LICENSES/doc"
   [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p "${HOME_PATH}/build_logo"
 
   git pull
 
   sed -i '/careysucci/d; /helloworld/d; /passwall/d; /OpenClash/d' "feeds.conf.default"
-  cat feeds.conf.default | awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf
+  (awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf) <feeds.conf.default
   mv -f uniq.conf feeds.conf.default
 
   # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
@@ -368,8 +373,8 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
       find . -type d -name "${i}" | grep -v 'danshui\|freifunk\|helloworld\|passwall3' | xargs -i rm -rf {}
     done
     if [[ -d "${HOME_PATH}/build/common/Share/btrfs-progs" ]]; then
-      rm -rf ${HOME_PATH}/feeds/packages/utils/btrfs-progs
-      cp -Rf ${HOME_PATH}/build/common/Share/btrfs-progs ${HOME_PATH}/feeds/packages/utils/btrfs-progs
+      rm -rf "${HOME_PATH}/feeds/packages/utils/btrfs-progs"
+      cp -Rf "${HOME_PATH}/build/common/Share/btrfs-progs" "${HOME_PATH}/feeds/packages/utils/btrfs-progs"
     fi
     ;;
   LIENOL)
@@ -385,32 +390,32 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
         find . -type d -name "${i}" | grep -v 'freifunk\|helloworld\|passwall3' | xargs -i rm -rf {}
       done
       if [[ -d "${HOME_PATH}/build/common/Share/libcap" ]]; then
-        rm -rf ${HOME_PATH}/feeds/packages/libs/libcap
-        cp -Rf ${HOME_PATH}/build/common/Share/libcap ${HOME_PATH}/feeds/packages/libs/libcap
+        rm -rf "${HOME_PATH}/feeds/packages/libs/libcap"
+        cp -Rf "${HOME_PATH}/build/common/Share/libcap" "${HOME_PATH}/feeds/packages/libs/libcap"
       fi
       if [[ -d "${HOME_PATH}/build/common/Share/cmake" ]]; then
-        rm -rf ${HOME_PATH}/tools/cmake
-        cp -Rf ${HOME_PATH}/build/common/Share/cmake ${HOME_PATH}/tools/cmake
-        rm -rf ${HOME_PATH}/feeds/packages/lang/ruby
-        cp -Rf ${HOME_PATH}/build/common/Share/ruby ${HOME_PATH}/feeds/packages/lang/ruby
-        rm -rf ${HOME_PATH}/feeds/packages/libs/yaml
-        cp -Rf ${HOME_PATH}/build/common/Share/yaml ${HOME_PATH}/feeds/packages/libs/yaml
+        rm -rf "${HOME_PATH}/tools/cmake"
+        cp -Rf "${HOME_PATH}/build/common/Share/cmake" "${HOME_PATH}/tools/cmake"
+        rm -rf "${HOME_PATH}/feeds/packages/lang/ruby"
+        cp -Rf "${HOME_PATH}/build/common/Share/ruby" "${HOME_PATH}/feeds/packages/lang/ruby"
+        rm -rf "${HOME_PATH}/feeds/packages/libs/yaml"
+        cp -Rf "${HOME_PATH}/build/common/Share/yaml" "${HOME_PATH}/feeds/packages/libs/yaml"
       fi
     elif [[ "${REPO_BRANCH}" == "21.02" ]]; then
       find . -type d -name "luci-app-unblockneteasemusic" -print0 | xargs -0 rm -rf {}
       if [[ -d "${HOME_PATH}/build/common/Share/cmake" ]]; then
-        rm -rf ${HOME_PATH}/tools/cmake
-        cp -Rf ${HOME_PATH}/build/common/Share/cmake ${HOME_PATH}/tools/cmake
+        rm -rf "${HOME_PATH}/tools/cmake"
+        cp -Rf "${HOME_PATH}/build/common/Share/cmake" "${HOME_PATH}/tools/cmake"
       fi
     elif [[ "${REPO_BRANCH}" == "22.03" ]]; then
       if [[ -d "${HOME_PATH}/build/common/Share/glib2" ]]; then
-        rm -rf ${HOME_PATH}/feeds/packages/libs/glib2
-        cp -Rf ${HOME_PATH}/build/common/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
-        rm -rf ${HOME_PATH}/feeds/packages/libs/pcre2
-        cp -Rf ${HOME_PATH}/build/common/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
+        rm -rf "${HOME_PATH}/feeds/packages/libs/glib2"
+        cp -Rf "${HOME_PATH}/build/common/Share/glib2" "${HOME_PATH}/feeds/packages/libs/glib2"
+        rm -rf "${HOME_PATH}/feeds/packages/libs/pcre2"
+        cp -Rf "${HOME_PATH}/build/common/Share/pcre2" "${HOME_PATH}/feeds/packages/libs/pcre2"
       fi
     elif [[ "${REPO_BRANCH}" == "23.05" ]]; then
-      sed -i 's/CONFIG_WERROR=y/# CONFIG_WERROR is not set/g' ${HOME_PATH}/target/linux/generic/config-5.15
+      sed -i 's/CONFIG_WERROR=y/# CONFIG_WERROR is not set/g' "${HOME_PATH}/target/linux/generic/config-5.15"
     fi
     ;;
   IMMORTALWRT)
@@ -433,24 +438,24 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
         find . -type d -name "${i}" | grep -v 'freifunk\|helloworld\|passwall3' | xargs -i rm -rf {}
       done
       if [[ -d "${HOME_PATH}/build/common/Share/libcap" ]]; then
-        rm -rf ${HOME_PATH}/feeds/packages/libs/libcap
-        cp -Rf ${HOME_PATH}/build/common/Share/libcap ${HOME_PATH}/feeds/packages/libs/libcap
+        rm -rf "${HOME_PATH}/feeds/packages/libs/libcap"
+        cp -Rf "${HOME_PATH}/build/common/Share/libcap" "${HOME_PATH}/feeds/packages/libs/libcap"
       fi
       if [[ -d "${HOME_PATH}/build/common/Share/luci-app-ttyd" ]]; then
         find . -type d -name 'luci-app-ttyd' -o -name 'ttyd' | grep -v 'Share' | xargs -i rm -rf {}
-        cp -Rf ${HOME_PATH}/build/common/Share/luci-app-ttyd ${HOME_PATH}/feeds/luci/applications/luci-app-ttyd
-        cp -Rf ${HOME_PATH}/build/common/Share/ttyd ${HOME_PATH}/feeds/packages/utils/ttyd
+        cp -Rf "${HOME_PATH}"/build/common/Share/luci-app-ttyd "${HOME_PATH}"/feeds/luci/applications/luci-app-ttyd
+        cp -Rf "${HOME_PATH}"/build/common/Share/ttyd "${HOME_PATH}"/feeds/packages/utils/ttyd
       fi
       if [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]]; then
         find . -type d -name 'luci-app-samba4' -o -name 'samba4' | grep -v 'Share\|freifunk\|helloworld\|passwall3' | xargs -i rm -rf {}
-        cp -Rf ${HOME_PATH}/build/common/Share/luci-app-samba4 ${HOME_PATH}/feeds/luci/applications/luci-app-samba4
-        cp -Rf ${HOME_PATH}/build/common/Share/samba4 ${HOME_PATH}/feeds/packages/net/samba4
-        rm -rf ${HOME_PATH}/feeds/packages/libs/liburing
-        cp -Rf ${HOME_PATH}/build/common/Share/liburing ${HOME_PATH}/feeds/packages/libs/liburing
-        rm -rf ${HOME_PATH}/feeds/packages/lang/perl-parse-yapp
-        cp -Rf ${HOME_PATH}/build/common/Share/perl-parse-yapp ${HOME_PATH}/feeds/packages/lang/perl-parse-yapp
+        cp -Rf "${HOME_PATH}"/build/common/Share/luci-app-samba4 "${HOME_PATH}"/feeds/luci/applications/luci-app-samba4
+        cp -Rf "${HOME_PATH}"/build/common/Share/samba4 "${HOME_PATH}"/feeds/packages/net/samba4
+        rm -rf "${HOME_PATH}"/feeds/packages/libs/liburing
+        cp -Rf "${HOME_PATH}"/build/common/Share/liburing "${HOME_PATH}"/feeds/packages/libs/liburing
+        rm -rf "${HOME_PATH}"/feeds/packages/lang/perl-parse-yapp
+        cp -Rf "${HOME_PATH}"/build/common/Share/perl-parse-yapp "${HOME_PATH}"/feeds/packages/lang/perl-parse-yapp
       fi
-      $svn https://github.com/Lienol/openwrt/tree/21.02/tools/cmake ${HOME_PATH}/tools/cmake
+      $svn https://github.com/Lienol/openwrt/tree/21.02/tools/cmake "${HOME_PATH}"/tools/cmake
     fi
     if [[ "${REPO_BRANCH}" == "openwrt-21.02" ]]; then
       s="luci-app-vssr,lua-maxminddb,luci-app-natter,natter,luci-app-unblockneteasemusic"
@@ -782,8 +787,9 @@ function Diy_OFFICIAL() {
 }
 
 function Diy_zdypartsh() {
+  echo "test222222"
   cd "${HOME_PATH}" || exit
-  source "$BUILD_PATH/$DIY_PART_SH"
+  source $BUILD_PATH/$DIY_PART_SH
   cd "${HOME_PATH}" || exit
   echo "test1122121"
 
