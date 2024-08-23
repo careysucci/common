@@ -91,18 +91,18 @@ function Diy_variable() {
   fi
 
   cat >"${start_path}" <<-EOF
-  SOURCE_CODE="${SOURCE_CODE}"
-  REPO_BRANCH="${REPO_BRANCH}"
-  CONFIG_FILE="seed/${CONFIG_FILE}"
-  CPU_SELECTION="${CPU_SELECTION}"
-  INFORMATION_NOTICE="${INFORMATION_NOTICE}"
-  UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
-  UPLOAD_RELEASE="${UPLOAD_RELEASE}"
-  CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
-  UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
-  COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
-  RETAIN_MINUTE="${RETAIN_MINUTE}"
-  KEEP_LATEST="${KEEP_LATEST}"
+SOURCE_CODE="${SOURCE_CODE}"
+REPO_BRANCH="${REPO_BRANCH}"
+CONFIG_FILE="seed/${CONFIG_FILE}"
+CPU_SELECTION="${CPU_SELECTION}"
+INFORMATION_NOTICE="${INFORMATION_NOTICE}"
+UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
+UPLOAD_RELEASE="${UPLOAD_RELEASE}"
+CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
+UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
+COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
+RETAIN_MINUTE="${RETAIN_MINUTE}"
+KEEP_LATEST="${KEEP_LATEST}"
 EOF
 
   if [[ -n "${BENDI_VERSION}" ]]; then
@@ -346,7 +346,6 @@ src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
 src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
-  cat feeds.conf.default
   ./scripts/feeds update -a
 
   # if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
@@ -571,12 +570,12 @@ function Diy_Wenjian() {
     "$(grep -q "openwrt_banner" "${ZZZ_PATH}")" && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
 
     cat >>"${ZZZ_PATH}" <<-EOF
-    sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
-    echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
-    sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
-    echo "luciversion    = \"${GIT_TOP_TAGGED}\"" >> /usr/lib/lua/luci/version.lua
-    sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
-    echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
+sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
+echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
+sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
+echo "luciversion    = \"${GIT_TOP_TAGGED}\"" >> /usr/lib/lua/luci/version.lua
+sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
+echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
   fi
   # echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
