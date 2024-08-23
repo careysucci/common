@@ -788,7 +788,8 @@ function Diy_OFFICIAL() {
 
 function Diy_zdypartsh() {
   echo "test222222"
-  cd "${HOME_PATH}" || exit
+  cd "${HOME_PATH}"
+  echo "${BUILD_PATH}/${DIY_PART_SH}"
   source $BUILD_PATH/$DIY_PART_SH
   cd "${HOME_PATH}" || exit
   echo "test1122121"
