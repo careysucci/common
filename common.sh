@@ -342,9 +342,9 @@ function Diy_checkout() {
   # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
   # src-git danshui1 https://github.com/281677160/openwrt-package.git;${SOURCE}
   cat >>"feeds.conf.default" <<-EOF
-src-git danshui1 https://github.com/kenzok8/openwrt-packages
-src-git small https://github.com/kenzok8/small
-src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
+  src-git danshui1 https://github.com/kenzok8/openwrt-packages
+  src-git small https://github.com/kenzok8/small
+  src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
   ./scripts/feeds update -a
 
@@ -503,7 +503,7 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
     ;;
   esac
 
-  for X in "${HOME_PATH}/feeds/passwall3/"*; do
+  for X in "${HOME_PATH}/feeds/passwall3/"*/; do
     find . -type d -name "${X}" | grep -v 'danshui\|passwall3' | xargs -i rm -rf {}
   done
   # 更换golang版本
@@ -541,10 +541,10 @@ function Diy_Wenjian() {
     echo "LUCI_BANBEN=${LUCI_BANBEN}" >>"$GITHUB_ENV"
   fi
 
-  Settings_path="$(find "${HOME_PATH}/package" -type d -name "default-settings")"
+  Settings_path="$(find "${HOME_PATH}"/package -type d -name "default-settings")"
   if [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "2" ]]; then
     cp -Rf "${HOME_PATH}"/build/common/Share/default-settings2 "${HOME_PATH}"/package/default-settings
-    [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" "${HOME_PATH}"/package/default-settings/Makefile
+    [[ ! -d "${HOME_PATH}"/feeds/luci/libs/luci-lib-base ]] && sed -i "s/+luci-lib-base //g" "${HOME_PATH}"/package/default-settings/Makefile
   elif [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "1" ]]; then
     cp -Rf "${HOME_PATH}"/build/common/Share/default-settings1 "${HOME_PATH}"/package/default-settings
   fi
@@ -590,15 +590,15 @@ EOF
     sed -i 's/admin:.*/admin::0:0:99999:7:::/g' "${FILES_PATH}"/etc/shadow
   fi
 
-  cp -Rf "${HOME_PATH}"/build/common/custom/Postapplication "${FILES_PATH}/etc/init.d/Postapplication"
+  cp -Rf "${HOME_PATH}"/build/common/custom/Postapplication "${FILES_PATH}"/etc/init.d/Postapplication
   sudo chmod +x "${FILES_PATH}/etc/init.d/Postapplication"
 
-  cp -Rf "${HOME_PATH}"/build/common/custom/networkdetection "${FILES_PATH}/etc/networkdetection"
-  sudo chmod +x "${FILES_PATH}/etc/networkdetection"
+  cp -Rf "${HOME_PATH}"/build/common/custom/networkdetection "${FILES_PATH}"/etc/networkdetection
+  sudo chmod +x "${FILES_PATH}"/etc/networkdetection
 
   [[ ! -d "${FILES_PATH}/usr/bin" ]] && mkdir -p "${FILES_PATH}"/usr/bin
-  cp -Rf "${HOME_PATH}"/build/common/custom/openwrt.sh "${FILES_PATH}/usr/bin/openwrt"
-  sudo chmod +x "${FILES_PATH}/usr/bin/openwrt"
+  cp -Rf "${HOME_PATH}"/build/common/custom/openwrt.sh "${FILES_PATH}"/usr/bin/openwrt
+  sudo chmod +x "${FILES_PATH}"/usr/bin/openwrt
 
   echo '#!/bin/bash' >"${DELETE}"
   sudo chmod +x "${DELETE}"
@@ -655,7 +655,7 @@ EOF
     ;;
   esac
 
-  source ${HOME_PATH}/build/common/Share/19.07/netsupport.sh
+  source "${HOME_PATH}"/build/common/Share/19.07/netsupport.sh
 
   # 不需要samba
   [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]] && rm -rf ${HOME_PATH}/build/common/Share/luci-app-samba4
