@@ -566,8 +566,7 @@ function Diy_Wenjian() {
       cp -Rf "${GENE_PATH}" "${HOME_PATH}"/LICENSES/doc/config_generates
     fi
     sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
-    # [[ -n "$(grep "openwrt_banner" "${ZZZ_PATH}")" ]] && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
-    "$(grep -q "openwrt_banner" "${ZZZ_PATH}")" && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
+    [[ -n "$(grep "openwrt_banner" "${ZZZ_PATH}")" ]] && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
 
     cat >>"${ZZZ_PATH}" <<-EOF
 sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
@@ -788,12 +787,9 @@ function Diy_OFFICIAL() {
 }
 
 function Diy_zdypartsh() {
-  echo "test222222"
-  cd "${HOME_PATH}"
-  echo "${BUILD_PATH}/${DIY_PART_SH}"
+  cd "${HOME_PATH}" || exit
   source "${BUILD_PATH}/${DIY_PART_SH}"
   cd "${HOME_PATH}" || exit
-  echo "test1122121"
 
   # 检查diskman目录是否存在，不存在时创建目录
   if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
@@ -821,10 +817,10 @@ function Diy_zdypartsh() {
     rm -rf "${HOME_PATH}/package/netspeedtest"
     mkdir -p "${HOME_PATH}/package/netspeedtest"
   fi
-  git clone https://github.com/sirpdboy/netspeedtest.git ${HOME_PATH}/package/netspeedtest
+  git clone https://github.com/sirpdboy/netspeedtest.git "${HOME_PATH}"/package/netspeedtest
 
   # passwall
-  find . -type d \(-name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' -print0\) | xargs -0 rm -rf {}
+  find . \(-type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' -print0\) | xargs -0 rm -rf {}
   sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
   if [[ "${PassWall_luci_branch}" == "1" ]]; then
     echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >>"feeds.conf.default"
@@ -835,8 +831,7 @@ function Diy_zdypartsh() {
   fi
 
   # openclash
-  find . -type d \(-name '*luci-app-openclash*' -o -name '*OpenClash*'\ -print0\) | xargs -0 ls -l {}
-  find . -type d \(-name '*luci-app-openclash*' -o -name '*OpenClash*'\ -print0\) | xargs -0 rm -rf {}
+  find . \(-type d -name '*luci-app-openclash*' -o -name '*OpenClash*'\ -print0\) | xargs -0 rm -rf {}
   sed -i '/OpenClash/d' "feeds.conf.default"
   if [[ "${OpenClash_branch}" == "1" ]]; then
     echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
