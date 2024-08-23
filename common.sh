@@ -32,9 +32,9 @@ function settings_variable() {
 function Diy_variable() {
   # 读取变量
   if [[ -n "${BENDI_VERSION}" ]]; then
-    export start_path="${GITHUB_WORKSPACE}/operates/${FOLDER_NAME}/relevance/settings.ini"
+    export start_path="${GITHUB_WORKSPACE}"/operates/${FOLDER_NAME}/relevance/settings.ini
   else
-    export start_path="${GITHUB_WORKSPACE}/build/${FOLDER_NAME}/relevance/settings.ini"
+    export start_path="${GITHUB_WORKSPACE}"/build/${FOLDER_NAME}/relevance/settings.ini
   fi
 
   if [[ -n "${INPUTS_REPO_BRANCH}" ]]; then
@@ -50,7 +50,7 @@ function Diy_variable() {
     COMPILATION_INFORMATION="${INPUTS_COMPILATION_INFORMATION}"
     # RETAIN_MINUTE="${RETAIN_MINUTE}"
     # KEEP_LATEST="${KEEP_LATEST}"
-    echo "SSH_ACTION=${INPUTS_SSH_ACTION}" >>${GITHUB_ENV}
+    echo "SSH_ACTION=${INPUTS_SSH_ACTION}" >>"${GITHUB_ENV}"
     WAREHOUSE_MAN="${GIT_REPOSITORY##*/}"
   else
     # SOURCE_CODE="${SOURCE_CODE}"
@@ -465,33 +465,33 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
       done
       if [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]]; then
         find . -type d -name 'luci-app-samba4' -o -name 'samba4' | grep -v 'Share\|freifunk\|helloworld\|passwall3' | xargs -i rm -rf {}
-        cp -Rf ${HOME_PATH}/build/common/Share/luci-app-samba4 ${HOME_PATH}/feeds/luci/applications/luci-app-samba4
-        cp -Rf ${HOME_PATH}/build/common/Share/samba4 ${HOME_PATH}/feeds/packages/net/samba4
-        rm -rf ${HOME_PATH}/feeds/packages/libs/liburing
-        cp -Rf ${HOME_PATH}/build/common/Share/liburing ${HOME_PATH}/feeds/packages/libs/liburing
-        rm -rf ${HOME_PATH}/feeds/packages/lang/perl-parse-yapp
-        cp -Rf ${HOME_PATH}/build/common/Share/perl-parse-yapp ${HOME_PATH}/feeds/packages/lang/perl-parse-yapp
+        cp -Rf "${HOME_PATH}"/build/common/Share/luci-app-samba4 "${HOME_PATH}"/feeds/luci/applications/luci-app-samba4
+        cp -Rf "${HOME_PATH}"/build/common/Share/samba4 "${HOME_PATH}"/feeds/packages/net/samba4
+        rm -rf "${HOME_PATH}"/feeds/packages/libs/liburing
+        cp -Rf "${HOME_PATH}"/build/common/Share/liburing "${HOME_PATH}"/feeds/packages/libs/liburing
+        rm -rf "${HOME_PATH}"/feeds/packages/lang/perl-parse-yapp
+        cp -Rf "${HOME_PATH}"/build/common/Share/perl-parse-yapp "${HOME_PATH}"/feeds/packages/lang/perl-parse-yapp
       fi
       if [[ -d "${HOME_PATH}/build/common/Share/cmake" ]]; then
-        rm -rf ${HOME_PATH}/tools/cmake
-        cp -Rf ${HOME_PATH}/build/common/Share/cmake ${HOME_PATH}/tools/cmake
-        rm -rf ${HOME_PATH}/feeds/packages/lang/ruby
-        cp -Rf ${HOME_PATH}/build/common/Share/ruby ${HOME_PATH}/feeds/packages/lang/ruby
-        rm -rf ${HOME_PATH}/feeds/packages/libs/yaml
-        cp -Rf ${HOME_PATH}/build/common/Share/yaml ${HOME_PATH}/feeds/packages/libs/yaml
+        rm -rf "${HOME_PATH}"/tools/cmake
+        cp -Rf "${HOME_PATH}"/build/common/Share/cmake "${HOME_PATH}"/tools/cmake
+        rm -rf "${HOME_PATH}"/feeds/packages/lang/ruby
+        cp -Rf "${HOME_PATH}"/build/common/Share/ruby "${HOME_PATH}"/feeds/packages/lang/ruby
+        rm -rf "${HOME_PATH}"/feeds/packages/libs/yaml
+        cp -Rf "${HOME_PATH}"/build/common/Share/yaml "${HOME_PATH}"/feeds/packages/libs/yaml
       fi
     fi
     if [[ "${REPO_BRANCH}" == "openwrt-22.03" ]]; then
       if [[ -d "${HOME_PATH}/build/common/Share/glib2" ]]; then
-        rm -rf ${HOME_PATH}/feeds/packages/libs/glib2
-        cp -Rf ${HOME_PATH}/build/common/Share/glib2 ${HOME_PATH}/feeds/packages/libs/glib2
-        rm -rf ${HOME_PATH}/feeds/packages/libs/pcre2
-        cp -Rf ${HOME_PATH}/build/common/Share/pcre2 ${HOME_PATH}/feeds/packages/libs/pcre2
+        rm -rf "${HOME_PATH}"/feeds/packages/libs/glib2
+        cp -Rf "${HOME_PATH}"/build/common/Share/glib2 "${HOME_PATH}"/feeds/packages/libs/glib2
+        rm -rf "${HOME_PATH}"/feeds/packages/libs/pcre2
+        cp -Rf "${HOME_PATH}"/build/common/Share/pcre2 "${HOME_PATH}"/feeds/packages/libs/pcre2
       fi
     fi
     if [[ -d "${HOME_PATH}/build/common/Share/tailscale" ]]; then
-      rm -rf ${HOME_PATH}/feeds/packages/net/tailscale
-      cp -Rf ${HOME_PATH}/build/common/Share/tailscale ${HOME_PATH}/feeds/packages/net/tailscale
+      rm -rf "${HOME_PATH}"/feeds/packages/net/tailscale
+      cp -Rf "${HOME_PATH}"/build/common/Share/tailscale "${HOME_PATH}"/feeds/packages/net/tailscale
     fi
     ;;
   XWRT)
@@ -507,96 +507,97 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
     find . -type d -name "${X}" | grep -v 'danshui\|passwall3' | xargs -i rm -rf {}
   done
   # 更换golang版本
-  rm -rf ${HOME_PATH}/feeds/packages/lang/golang
-  git clone https://github.com/sbwml/packages_lang_golang -b 22.x ${HOME_PATH}/feeds/packages/lang/golang
+  rm -rf "${HOME_PATH}"/feeds/packages/lang/golang
+  git clone https://github.com/sbwml/packages_lang_golang -b 22.x "${HOME_PATH}"/feeds/packages/lang/golang
 
   if [[ -d "${HOME_PATH}/feeds/danshui1/relevance/shadowsocks-libev" ]]; then
-    rm -rf ${HOME_PATH}/feeds/packages/net/shadowsocks-libev
-    mv -f feeds/danshui1/relevance/shadowsocks-libev ${HOME_PATH}/feeds/packages/net/shadowsocks-libev
+    rm -rf "${HOME_PATH}"/feeds/packages/net/shadowsocks-libev
+    mv -f feeds/danshui1/relevance/shadowsocks-libev "${HOME_PATH}"/feeds/packages/net/shadowsocks-libev
   fi
   if [[ -d "${HOME_PATH}/feeds/danshui1/relevance/kcptun" ]]; then
-    rm -rf ${HOME_PATH}/feeds/packages/net/kcptun
-    mv -f ${HOME_PATH}/feeds/danshui1/relevance/kcptun ${HOME_PATH}/feeds/packages/net/kcptun
+    rm -rf "${HOME_PATH}"/feeds/packages/net/kcptun
+    mv -f "${HOME_PATH}"/feeds/danshui1/relevance/kcptun "${HOME_PATH}"/feeds/packages/net/kcptun
   fi
 
   if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
-    cp -Rf ${HOME_PATH}/build/common/Share/rust ${HOME_PATH}/feeds/packages/lang/rust
+    cp -Rf "${HOME_PATH}"/build/common/Share/rust "${HOME_PATH}"/feeds/packages/lang/rust
   fi
 
-  [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf ${HOME_PATH}/build/common/Share/packr ${HOME_PATH}/feeds/packages/devel/packr
+  [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf "${HOME_PATH}"/build/common/Share/packr "${HOME_PATH}"/feeds/packages/devel/packr
   ./scripts/feeds update danshui2
 
-  cp -Rf ${HOME_PATH}/feeds.conf.default ${HOME_PATH}/LICENSES/doc/uniq.conf
+  cp -Rf "${HOME_PATH}"/feeds.conf.default "${HOME_PATH}"/LICENSES/doc/uniq.conf
 }
 
 function Diy_Wenjian() {
-  cp -Rf ${HOME_PATH}/LICENSES/doc/uniq.conf ${HOME_PATH}/feeds.conf.default
+  cp -Rf "${HOME_PATH}"/LICENSES/doc/uniq.conf "${HOME_PATH}"/feeds.conf.default
 
   # 增加中文语言包
   if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
     LUCI_BANBEN="2"
-    echo "LUCI_BANBEN=${LUCI_BANBEN}" >>$GITHUB_ENV
+    echo "LUCI_BANBEN=${LUCI_BANBEN}" >>"$GITHUB_ENV"
   else
     LUCI_BANBEN="1"
-    echo "LUCI_BANBEN=${LUCI_BANBEN}" >>$GITHUB_ENV
+    echo "LUCI_BANBEN=${LUCI_BANBEN}" >>"$GITHUB_ENV"
   fi
 
   Settings_path="$(find "${HOME_PATH}/package" -type d -name "default-settings")"
   if [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "2" ]]; then
-    cp -Rf ${HOME_PATH}/build/common/Share/default-settings2 ${HOME_PATH}/package/default-settings
-    [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" ${HOME_PATH}/package/default-settings/Makefile
+    cp -Rf "${HOME_PATH}"/build/common/Share/default-settings2 "${HOME_PATH}"/package/default-settings
+    [[ ! -d "${HOME_PATH}/feeds/luci/libs/luci-lib-base" ]] && sed -i "s/+luci-lib-base //g" "${HOME_PATH}"/package/default-settings/Makefile
   elif [[ -z "${Settings_path}" ]] && [[ "${LUCI_BANBEN}" == "1" ]]; then
-    cp -Rf ${HOME_PATH}/build/common/Share/default-settings1 ${HOME_PATH}/package/default-settings
+    cp -Rf "${HOME_PATH}"/build/common/Share/default-settings1 "${HOME_PATH}"/package/default-settings
   fi
 
   ZZZ_PATH="$(find "${HOME_PATH}/package" -type f -name "*-default-settings" | grep files)"
   if [[ -n "${ZZZ_PATH}" ]]; then
-    echo "ZZZ_PATH=${ZZZ_PATH}" >>${GITHUB_ENV}
+    echo "ZZZ_PATH=${ZZZ_PATH}" >>"${GITHUB_ENV}"
     sed -i '/exit 0$/d' "${ZZZ_PATH}"
 
     if [[ -f "${HOME_PATH}/LICENSES/doc/default-settings" ]]; then
-      cp -Rf ${HOME_PATH}/LICENSES/doc/default-settings "${ZZZ_PATH}"
+      cp -Rf "${HOME_PATH}"/LICENSES/doc/default-settings "${ZZZ_PATH}"
     else
-      cp -Rf "${ZZZ_PATH}" ${HOME_PATH}/LICENSES/doc/default-settings
+      cp -Rf "${ZZZ_PATH}" "${HOME_PATH}"/LICENSES/doc/default-settings
     fi
 
     if [[ -f "${HOME_PATH}/LICENSES/doc/config_generates" ]]; then
-      cp -Rf ${HOME_PATH}/LICENSES/doc/config_generates "${GENE_PATH}"
+      cp -Rf "${HOME_PATH}"/LICENSES/doc/config_generates "${GENE_PATH}"
     else
-      cp -Rf "${GENE_PATH}" ${HOME_PATH}/LICENSES/doc/config_generates
+      cp -Rf "${GENE_PATH}" "${HOME_PATH}"/LICENSES/doc/config_generates
     fi
     sed -i "s?main.lang=.*?main.lang='zh_cn'?g" "${ZZZ_PATH}"
-    [[ -n "$(grep "openwrt_banner" "${ZZZ_PATH}")" ]] && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
+    # [[ -n "$(grep "openwrt_banner" "${ZZZ_PATH}")" ]] && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
+    "$(grep -q "openwrt_banner" "${ZZZ_PATH}")" && sed -i '/openwrt_banner/d' "${ZZZ_PATH}"
 
     cat >>"${ZZZ_PATH}" <<-EOF
-sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
-echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
-sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
-echo "luciversion    = \"${GIT_TOP_TAGGED}\"" >> /usr/lib/lua/luci/version.lua
-sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
-echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
+    sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
+    echo "DISTRIB_DESCRIPTION='OpenWrt '" >> /etc/openwrt_release
+    sed -i '/luciversion/d' /usr/lib/lua/luci/version.lua
+    echo "luciversion    = \"${GIT_TOP_TAGGED}\"" >> /usr/lib/lua/luci/version.lua
+    sed -i '/luciname/d' /usr/lib/lua/luci/version.lua
+    echo "luciname    = \"Wy\"" >> /usr/lib/lua/luci/version.lua
 EOF
   fi
   # echo "luciname    = \"${SOURCE}\"" >> /usr/lib/lua/luci/version.lua
 
   # 增加一些应用
-  cp -Rf ${HOME_PATH}/build/common/custom/default-setting "${DEFAULT_PATH}"
+  cp -Rf "${HOME_PATH}"/build/common/custom/default-setting "${DEFAULT_PATH}"
   sudo chmod +x "${DEFAULT_PATH}"
   sed -i '/exit 0$/d' "${DEFAULT_PATH}"
   sed -i "s?112233?OpenWrt - ${GIT_TOP_TAGGED}?g" "${DEFAULT_PATH}" >/dev/null 2>&1
-  sed -i 's/root:.*/root::0:0:99999:7:::/g' ${FILES_PATH}/etc/shadow
-  if [[ $(grep -Eoc "admin:.*" ${FILES_PATH}/etc/shadow) -eq '1' ]]; then
-    sed -i 's/admin:.*/admin::0:0:99999:7:::/g' ${FILES_PATH}/etc/shadow
+  sed -i 's/root:.*/root::0:0:99999:7:::/g' "${FILES_PATH}"/etc/shadow
+  if [[ $(grep -Eoc "admin:.*" "${FILES_PATH}"/etc/shadow) -eq '1' ]]; then
+    sed -i 's/admin:.*/admin::0:0:99999:7:::/g' "${FILES_PATH}"/etc/shadow
   fi
 
-  cp -Rf ${HOME_PATH}/build/common/custom/Postapplication "${FILES_PATH}/etc/init.d/Postapplication"
+  cp -Rf "${HOME_PATH}"/build/common/custom/Postapplication "${FILES_PATH}/etc/init.d/Postapplication"
   sudo chmod +x "${FILES_PATH}/etc/init.d/Postapplication"
 
-  cp -Rf ${HOME_PATH}/build/common/custom/networkdetection "${FILES_PATH}/etc/networkdetection"
+  cp -Rf "${HOME_PATH}"/build/common/custom/networkdetection "${FILES_PATH}/etc/networkdetection"
   sudo chmod +x "${FILES_PATH}/etc/networkdetection"
 
-  [[ ! -d "${FILES_PATH}/usr/bin" ]] && mkdir -p ${FILES_PATH}/usr/bin
-  cp -Rf ${HOME_PATH}/build/common/custom/openwrt.sh "${FILES_PATH}/usr/bin/openwrt"
+  [[ ! -d "${FILES_PATH}/usr/bin" ]] && mkdir -p "${FILES_PATH}"/usr/bin
+  cp -Rf "${HOME_PATH}"/build/common/custom/openwrt.sh "${FILES_PATH}/usr/bin/openwrt"
   sudo chmod +x "${FILES_PATH}/usr/bin/openwrt"
 
   echo '#!/bin/bash' >"${DELETE}"
@@ -790,7 +791,7 @@ function Diy_zdypartsh() {
   echo "test222222"
   cd "${HOME_PATH}"
   echo "${BUILD_PATH}/${DIY_PART_SH}"
-  source $BUILD_PATH/$DIY_PART_SH
+  source "${BUILD_PATH}/${DIY_PART_SH}"
   cd "${HOME_PATH}" || exit
   echo "test1122121"
 
