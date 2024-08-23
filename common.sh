@@ -336,7 +336,7 @@ function Diy_checkout() {
   git pull
 
   sed -i '/careysucci/d; /helloworld/d; /passwall/d; /OpenClash/d' "feeds.conf.default"
-  cat feeds.conf.default|awk '!/^#/'|awk '!/^$/'|awk '!a[$1" "$2]++{print}' >uniq.conf
+  (awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf) <feeds.conf.default
   mv -f uniq.conf feeds.conf.default
 
   # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
@@ -346,6 +346,7 @@ function Diy_checkout() {
   src-git small https://github.com/kenzok8/small
   src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
+  cat feeds.conf.default
   ./scripts/feeds update -a
 
   # if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
