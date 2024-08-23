@@ -342,9 +342,9 @@ function Diy_checkout() {
   # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
   # src-git danshui1 https://github.com/281677160/openwrt-package.git;${SOURCE}
   cat >>"feeds.conf.default" <<-EOF
-  src-git danshui1 https://github.com/kenzok8/openwrt-packages
-  src-git small https://github.com/kenzok8/small
-  src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
+src-git danshui1 https://github.com/kenzok8/openwrt-packages
+src-git small https://github.com/kenzok8/small
+src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
   cat feeds.conf.default
   ./scripts/feeds update -a
