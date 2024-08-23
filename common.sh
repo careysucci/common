@@ -91,18 +91,18 @@ function Diy_variable() {
   fi
 
   cat >"${start_path}" <<-EOF
-SOURCE_CODE="${SOURCE_CODE}"
-REPO_BRANCH="${REPO_BRANCH}"
-CONFIG_FILE="seed/${CONFIG_FILE}"
-CPU_SELECTION="${CPU_SELECTION}"
-INFORMATION_NOTICE="${INFORMATION_NOTICE}"
-UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
-UPLOAD_RELEASE="${UPLOAD_RELEASE}"
-CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
-UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
-COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
-RETAIN_MINUTE="${RETAIN_MINUTE}"
-KEEP_LATEST="${KEEP_LATEST}"
+  SOURCE_CODE="${SOURCE_CODE}"
+  REPO_BRANCH="${REPO_BRANCH}"
+  CONFIG_FILE="seed/${CONFIG_FILE}"
+  CPU_SELECTION="${CPU_SELECTION}"
+  INFORMATION_NOTICE="${INFORMATION_NOTICE}"
+  UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
+  UPLOAD_RELEASE="${UPLOAD_RELEASE}"
+  CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
+  UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
+  COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
+  RETAIN_MINUTE="${RETAIN_MINUTE}"
+  KEEP_LATEST="${KEEP_LATEST}"
 EOF
 
   if [[ -n "${BENDI_VERSION}" ]]; then
@@ -785,32 +785,33 @@ function Diy_zdypartsh() {
   cd "${HOME_PATH}" || exit
   source "$BUILD_PATH/$DIY_PART_SH"
   cd "${HOME_PATH}" || exit
+  echo "test1122121"
 
   # 检查diskman目录是否存在，不存在时创建目录
   if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
-    mkdir -p ${HOME_PATH}/package/luci-app-diskman
+    mkdir -p "${HOME_PATH}/package/luci-app-diskman"
   else
-    rm -rf ${HOME_PATH}/package/luci-app-diskman
-    mkdir -p ${HOME_PATH}/package/luci-app-diskman
+    rm -rf "${HOME_PATH}/package/luci-app-diskman"
+    mkdir -p "${HOME_PATH}/package/luci-app-diskman"
   fi
   # 下载diskman的Makefile文件
   wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/package/luci-app-diskman/Makefile
 
   # diskman依赖库
   if [[ ! -d "${HOME_PATH}/package/parted" ]]; then
-    mkdir -p ${HOME_PATH}/package/parted
+    mkdir -p "${HOME_PATH}/package/parted"
   else
-    rm -rf ${HOME_PATH}/package/parted
-    mkdir -p ${HOME_PATH}/package/parted
+    rm -rf "${HOME_PATH}/package/parted"
+    mkdir -p "${HOME_PATH}/package/parted"
   fi
   wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/package/parted/Makefile
 
   # speedtest
   if [[ ! -d "${HOME_PATH}/package/netspeedtest" ]]; then
-    mkdir -p ${HOME_PATH}/package/netspeedtest
+    mkdir -p "${HOME_PATH}/package/netspeedtest"
   else
-    rm -rf ${HOME_PATH}/package/netspeedtest
-    mkdir -p ${HOME_PATH}/package/netspeedtest
+    rm -rf "${HOME_PATH}/package/netspeedtest"
+    mkdir -p "${HOME_PATH}/package/netspeedtest"
   fi
   git clone https://github.com/sirpdboy/netspeedtest.git ${HOME_PATH}/package/netspeedtest
 
@@ -855,7 +856,7 @@ function Diy_zdypartsh() {
     cp -Rf ${HOME_PATH}/build/common/language/zh-cn.sh ${HOME_PATH}/zh-cn.sh
     /bin/bash zh-cn.sh && rm -rf zh-cn.sh
   fi
-  ./scripts/feeds update -a && ./scripts/feeds install -a -f >/dev/null 2>&1
+  ./scripts/feeds install -a -f >/dev/null 2>&1
   # 使用自定义配置文件
   [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
 }
