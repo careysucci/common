@@ -498,7 +498,7 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
     ;;
   esac
 
-  for X in $("${HOME_PATH}/feeds/passwall3/*"); do
+  for X in "${HOME_PATH}/feeds/passwall3/"*; do
     find . -type d -name "${X}" | grep -v 'danshui\|passwall3' | xargs -i rm -rf {}
   done
   # 更换golang版本
@@ -783,7 +783,7 @@ function Diy_OFFICIAL() {
 
 function Diy_zdypartsh() {
   cd "${HOME_PATH}" || exit
-  source ${BUILD_PATH}/${DIY_PART_SH}
+  source "$BUILD_PATH/$DIY_PART_SH"
   cd "${HOME_PATH}" || exit
 
   # 检查diskman目录是否存在，不存在时创建目录
