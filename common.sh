@@ -1498,7 +1498,7 @@ function Diy_prevent() {
     echo "CONFIG_PACKAGE_luci-app-openclash=y" >>${HOME_PATH}/.config
   fi
 
-  "${HOME_PATH}" || exit
+  cd "${HOME_PATH}" || exit
   make defconfig >/dev/null 2>&1
   [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p ${HOME_PATH}/build_logo
   ./scripts/diffconfig.sh >${HOME_PATH}/build_logo/config.txt
@@ -1521,7 +1521,7 @@ sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
 }
 
 function Make_defconfig() {
-  "${HOME_PATH}" || exit
+  cd "${HOME_PATH}" || exit
   echo "正在执行：识别源码编译为何机型"
   TARGET_BOARD="$(awk -F '[="]+' '/TARGET_BOARD/{print $2}' ${HOME_PATH}/.config)"
   TARGET_SUBTARGET="$(awk -F '[="]+' '/TARGET_SUBTARGET/{print $2}' ${HOME_PATH}/.config)"
@@ -1558,7 +1558,7 @@ function Make_defconfig() {
 }
 
 function Diy_Publicarea2() {
-  "${HOME_PATH}" || exit
+  cd "${HOME_PATH}" || exit
   if [[ "${Delete_unnecessary_items}" == "1" ]]; then
     echo "删除其他机型的固件,只保留当前主机型固件完成"
     sed -i "s|^TARGET_|# TARGET_|g; s|# TARGET_DEVICES += ${TARGET_PROFILE}|TARGET_DEVICES += ${TARGET_PROFILE}|" ${HOME_PATH}/target/linux/${TARGET_BOARD}/image/Makefile
@@ -1634,7 +1634,7 @@ function Diy_Publicarea2() {
 }
 
 function Diy_adguardhome() {
-  "${HOME_PATH}" || exit
+  cd "${HOME_PATH}" || exit
   if [[ $(grep -c "CONFIG_ARCH=\"x86_64\"" ${HOME_PATH}/.config) -eq '1' ]]; then
     Arch="linux_amd64"
     Archclash="linux-amd64"
@@ -1769,7 +1769,7 @@ function Diy_adguardhome() {
 }
 
 function Diy_upgrade2() {
-  "${HOME_PATH}" || exit
+  cd "${HOME_PATH}" || exit
   sed -i 's/^[ ]*//g' "${DEFAULT_PATH}"
   sed -i '$a\exit 0' "${DEFAULT_PATH}"
   sed -i 's/^[ ]*//g' "${ZZZ_PATH}"
@@ -1932,7 +1932,7 @@ function Package_amlogic() {
 
 function Diy_upgrade3() {
   if [ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]; then
-    "${HOME_PATH}" || exit
+    cd "${HOME_PATH}" || exit
     source ${BUILD_PATH}/upgrade.sh && Diy_Part3
   fi
 }
