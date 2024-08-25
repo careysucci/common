@@ -790,7 +790,7 @@ function Diy_zdypartsh() {
   cd "${HOME_PATH}" || exit
   source "${BUILD_PATH}/${DIY_PART_SH}"
   cd "${HOME_PATH}" || exit
-  echo GIT_TOP_TAGGED="snapshot $(git describe --tags)" >> "${GITHUB_ENV}"
+  echo "GIT_TOP_TAGGED=snapshot $(git describe --tags)" >> "${GITHUB_ENV}"
 
   # 检查diskman目录是否存在，不存在时创建目录
   if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
