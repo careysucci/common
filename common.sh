@@ -1523,10 +1523,10 @@ sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
 function Make_defconfig() {
   cd "${HOME_PATH}" || exit
   echo "正在执行：识别源码编译为何机型"
-  TARGET_BOARD="$(awk -F '[="]+' '/TARGET_BOARD/{print $2}' ${HOME_PATH}/.config)"
-  TARGET_SUBTARGET="$(awk -F '[="]+' '/TARGET_SUBTARGET/{print $2}' ${HOME_PATH}/.config)"
-  TARGET_PROFILE_DG="$(awk -F '[="]+' '/TARGET_PROFILE/{print $2}' ${HOME_PATH}/.config)"
-  export TARGET_BOARD, TARGET_SUBTARGET, TARGET_PROFILE_DG
+  TARGET_BOARD="$(awk -F '[="]+' '/TARGET_BOARD/{print $2}' "${HOME_PATH}"/.config)"
+  TARGET_SUBTARGET="$(awk -F '[="]+' '/TARGET_SUBTARGET/{print $2}' "${HOME_PATH}"/.config)"
+  TARGET_PROFILE_DG="$(awk -F '[="]+' '/TARGET_PROFILE/{print $2}' "${HOME_PATH}"/.config)"
+  export TARGET_BOARD TARGET_SUBTARGET TARGET_PROFILE_DG
   if [[ -n "$(grep -Eo 'CONFIG_TARGET.*x86.*64.*=y' ${HOME_PATH}/.config)" ]]; then
     export TARGET_PROFILE="x86-64"
   elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*x86.*=y' ${HOME_PATH}/.config)" ]]; then
