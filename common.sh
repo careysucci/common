@@ -790,6 +790,7 @@ function Diy_zdypartsh() {
   cd "${HOME_PATH}" || exit
   source "${BUILD_PATH}/${DIY_PART_SH}"
   cd "${HOME_PATH}" || exit
+  echo GIT_TOP_TAGGED="snapshot $(git describe --tags)" >> "${GITHUB_ENV}"
 
   # 检查diskman目录是否存在，不存在时创建目录
   if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
@@ -1255,7 +1256,7 @@ EOF
 }
 
 function Diy_prevent() {
-  "${HOME_PATH}" || exit
+  cd "${HOME_PATH}" || exit
   Diy_IPv6helper
   echo "正在执行：判断插件有否冲突减少编译错误"
   make defconfig >/dev/null 2>&1
