@@ -820,7 +820,7 @@ function Diy_zdypartsh() {
   git clone https://github.com/sirpdboy/netspeedtest.git "${HOME_PATH}"/package/netspeedtest
 
   # passwall
-  find . \(-type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2' -print0\) | xargs -0 rm -rf {}
+  find . \(-type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2'\) -print0 | xargs -0 rm -rf
   sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
   if [[ "${PassWall_luci_branch}" == "1" ]]; then
     echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >>"feeds.conf.default"
@@ -831,7 +831,7 @@ function Diy_zdypartsh() {
   fi
 
   # openclash
-  find . \(-type d -name '*luci-app-openclash*' -o -name '*OpenClash*'\ -print0\) | xargs -0 rm -rf {}
+  find . \(-type d -name '*luci-app-openclash*' -o -name '*OpenClash*'\) -print0 | xargs -0 rm -rf
   sed -i '/OpenClash/d' "feeds.conf.default"
   if [[ "${OpenClash_branch}" == "1" ]]; then
     echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
@@ -1177,9 +1177,9 @@ function Diy_feeds() {
 }
 
 function Diy_IPv6helper() {
-  "${HOME_PATH}" || exit
-  if [[ "${Enable_IPV6_function}" == "1" ]] || [[ "${Create_Ipv6_Lan}" == "1" ]]; then
-    echo '
+cd "${HOME_PATH}" || exit
+if [[ "${Enable_IPV6_function}" == "1" ]] || [[ "${Create_Ipv6_Lan}" == "1" ]]; then
+echo '
 CONFIG_PACKAGE_ipv6helper=y
 CONFIG_PACKAGE_ip6tables=y
 CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
@@ -1189,10 +1189,10 @@ CONFIG_IPV6=y
 CONFIG_PACKAGE_6rd=y
 CONFIG_PACKAGE_6to4=y
 ' >>${HOME_PATH}/.config
-  fi
+fi
 
-  if [[ "${Enable_IPV4_function}" == "1" ]]; then
-    echo '
+if [[ "${Enable_IPV4_function}" == "1" ]]; then
+echo '
 # CONFIG_PACKAGE_ipv6helper is not set
 # CONFIG_PACKAGE_ip6tables is not set
 # CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
@@ -1202,14 +1202,14 @@ CONFIG_PACKAGE_6to4=y
 # CONFIG_PACKAGE_6rd is not set
 # CONFIG_PACKAGE_6to4 is not set
 ' >>${HOME_PATH}/.config
-  fi
+fi
 
-  if [[ "${Disable_NaiveProxy}" == "1" ]]; then
-    sed -i '/NaiveProxy/d; /naiveproxy/d' ${HOME_PATH}/.config
-  fi
+if [[ "${Disable_NaiveProxy}" == "1" ]]; then
+  sed -i '/NaiveProxy/d; /naiveproxy/d' ${HOME_PATH}/.config
+fi
 
-  if [[ "${Automatic_Mount_Settings}" == "1" ]]; then
-    echo '
+if [[ "${Automatic_Mount_Settings}" == "1" ]]; then
+echo '
 CONFIG_PACKAGE_block-mount=y
 CONFIG_PACKAGE_fdisk=y
 CONFIG_PACKAGE_usbutils=y
@@ -1228,13 +1228,13 @@ CONFIG_PACKAGE_kmod-fs-vfat=y
 CONFIG_PACKAGE_kmod-fuse=y
 # CONFIG_PACKAGE_kmod-fs-ntfs is not set
 ' >>${HOME_PATH}/.config
-    mkdir -p ${HOME_PATH}/files/etc/hotplug.d/block
-    cp -Rf ${HOME_PATH}/build/common/custom/10-mount ${HOME_PATH}/files/etc/hotplug.d/block/10-mount
-  fi
+mkdir -p ${HOME_PATH}/files/etc/hotplug.d/block
+cp -Rf ${HOME_PATH}/build/common/custom/10-mount ${HOME_PATH}/files/etc/hotplug.d/block/10-mount
+fi
 
-  if [[ "${Disable_autosamba}" == "1" ]]; then
-    sed -i '/luci-i18n-samba/d; /PACKAGE_samba/d; /SAMBA_MAX/d; /SAMBA4_SERVER/d' "${HOME_PATH}/.config"
-    echo '
+if [[ "${Disable_autosamba}" == "1" ]]; then
+sed -i '/luci-i18n-samba/d; /PACKAGE_samba/d; /SAMBA_MAX/d; /SAMBA4_SERVER/d' "${HOME_PATH}/.config"
+echo '
 # CONFIG_PACKAGE_autosamba is not set
 # CONFIG_PACKAGE_luci-app-samba is not set
 # CONFIG_PACKAGE_luci-app-samba4 is not set
@@ -1242,12 +1242,12 @@ CONFIG_PACKAGE_kmod-fuse=y
 # CONFIG_PACKAGE_samba4-libs is not set
 # CONFIG_PACKAGE_samba4-server is not set
 ' >>${HOME_PATH}/.config
-  else
-    sed -i '/luci-app-samba/d; /CONFIG_PACKAGE_samba/d' "${HOME_PATH}/.config"
-    echo "CONFIG_PACKAGE_autosamba=y" >>${HOME_PATH}/.config
-  fi
+else
+  sed -i '/luci-app-samba/d; /CONFIG_PACKAGE_samba/d' "${HOME_PATH}/.config"
+  echo "CONFIG_PACKAGE_autosamba=y" >>${HOME_PATH}/.config
+fi
 
-  cat >>"${HOME_PATH}/.config" <<-EOF
+cat >>"${HOME_PATH}/.config" <<-EOF
 CONFIG_PACKAGE_luci=y
 CONFIG_PACKAGE_default-settings=y
 CONFIG_PACKAGE_default-settings-chn=y
@@ -1502,7 +1502,7 @@ function Diy_prevent() {
   [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p ${HOME_PATH}/build_logo
   ./scripts/diffconfig.sh >${HOME_PATH}/build_logo/config.txt
 
-  d="CONFIG_CGROUPFS_MOUNT_KERNEL_CGROUPS=y,CONFIG_DOCKER_CGROUP_OPTIONS=y,CONFIG_DOCKER_NET_MACVLAN=y,CONFIG_DOCKER_STO_EXT4=y, \
+d="CONFIG_CGROUPFS_MOUNT_KERNEL_CGROUPS=y,CONFIG_DOCKER_CGROUP_OPTIONS=y,CONFIG_DOCKER_NET_MACVLAN=y,CONFIG_DOCKER_STO_EXT4=y, \
 CONFIG_KERNEL_CGROUP_DEVICE=y,CONFIG_KERNEL_CGROUP_FREEZER=y,CONFIG_KERNEL_CGROUP_NET_PRIO=y,CONFIG_KERNEL_EXT4_FS_POSIX_ACL=y,CONFIG_KERNEL_EXT4_FS_SECURITY=y, \
 CONFIG_KERNEL_FS_POSIX_ACL=y,CONFIG_KERNEL_NET_CLS_CGROUP=y,CONFIG_PACKAGE_btrfs-progs=y,CONFIG_PACKAGE_cgroupfs-mount=y, \
 CONFIG_PACKAGE_containerd=y,CONFIG_PACKAGE_docker=y,CONFIG_PACKAGE_dockerd=y,CONFIG_PACKAGE_fdisk=y,CONFIG_PACKAGE_kmod-asn1-encoder=y,CONFIG_PACKAGE_kmod-br-netfilter=y, \
@@ -1512,11 +1512,11 @@ CONFIG_PACKAGE_kmod-lib-zstd=y,CONFIG_PACKAGE_kmod-nf-ipvs=y,CONFIG_PACKAGE_kmod
 CONFIG_PACKAGE_kmod-veth=y,CONFIG_PACKAGE_libdevmapper=y,CONFIG_PACKAGE_liblzo=y,CONFIG_PACKAGE_libnetwork=y,CONFIG_PACKAGE_libseccomp=y,CONFIG_PACKAGE_luci-i18n-docker-zh-cn=y, \
 CONFIG_PACKAGE_luci-i18n-dockerman-zh-cn=y,CONFIG_PACKAGE_luci-lib-docker=y,CONFIG_PACKAGE_mount-utils=y,CONFIG_PACKAGE_runc=y,CONFIG_PACKAGE_tini=y,CONFIG_PACKAGE_naiveproxy=y, \
 CONFIG_PACKAGE_samba36-server=y,CONFIG_PACKAGE_samba4-libs=y,CONFIG_PACKAGE_samba4-server=y"
-  k=("${d//,/ }")
-  for x in "${k[@]}"; do
-    sed -i "/${x}/d" "${HOME_PATH}/build_logo/config.txt"
-  done
-  sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
+k=("${d//,/ }")
+for x in "${k[@]}"; do
+  sed -i "/${x}/d" "${HOME_PATH}/build_logo/config.txt"
+done
+sed -i '/^$/d' "${HOME_PATH}/build_logo/config.txt"
 }
 
 function Make_defconfig() {
@@ -1808,11 +1808,11 @@ function openwrt_armvirt() {
     exit 1
   fi
 
-  cat >"${RELEVANCE}/armsrstart" <<-EOF
+cat >"${RELEVANCE}/armsrstart" <<-EOF
 Trigger packaging ${FOLDER_NAME} program-$(date +%Y%m%d%H%M%S)
 EOF
 
-  cat >"${RELEVANCE}/${SOURCE}.ini" <<-EOF
+cat >"${RELEVANCE}/${SOURCE}.ini" <<-EOF
 amlogic_model="${amlogic_model}"
 amlogic_kernel="${amlogic_kernel}"
 auto_kernel="${auto_kernel}"
