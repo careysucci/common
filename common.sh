@@ -820,7 +820,7 @@ function Diy_zdypartsh() {
   git clone https://github.com/sirpdboy/netspeedtest.git "${HOME_PATH}"/package/netspeedtest
 
   # passwall
-  find . \(-type d -name '*luci-app-passwall*' -o -name 'passwall' -o -name 'passwall2'\) -print0 | xargs -0 rm -rf
+  find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
   sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
   if [[ "${PassWall_luci_branch}" == "1" ]]; then
     echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >>"feeds.conf.default"
@@ -830,16 +830,16 @@ function Diy_zdypartsh() {
     # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
   fi
 
-  # openclash
-  find . \(-type d -name '*luci-app-openclash*' -o -name '*OpenClash*'\) -print0 | xargs -0 rm -rf
-  sed -i '/OpenClash/d' "feeds.conf.default"
-  if [[ "${OpenClash_branch}" == "1" ]]; then
-    echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
-    echo "OpenClash_branch=dev" >>${GITHUB_ENV}
-  else
-    echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >>"feeds.conf.default"
-    echo "OpenClash_branch=master" >>${GITHUB_ENV}
-  fi
+  # # openclash
+  # find . -type d -name '*luci-app-openclash*' -o -name '*OpenClash*' | xargs -i rm -rf {}
+  # sed -i '/OpenClash/d' "feeds.conf.default"
+  # if [[ "${OpenClash_branch}" == "1" ]]; then
+  #   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
+  #   echo "OpenClash_branch=dev" >>${GITHUB_ENV}
+  # else
+  #   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >>"feeds.conf.default"
+  #   echo "OpenClash_branch=master" >>${GITHUB_ENV}
+  # fi
 
   cat feeds.conf.default | awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf
   mv -f uniq.conf feeds.conf.default
