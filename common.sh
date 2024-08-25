@@ -1570,7 +1570,7 @@ function Diy_Publicarea2() {
   else
     KERNEL_patc="patches-${Replace_Kernel}"
   fi
-  export patchverl, KERNEL_patc
+  export patchverl  KERNEL_patc
 
   if [[ "${Replace_Kernel}" == "0" ]]; then
     echo "不进行内核更换"
