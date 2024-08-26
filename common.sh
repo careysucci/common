@@ -341,10 +341,10 @@ function Diy_checkout() {
 
   # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
   # src-git danshui1 https://github.com/281677160/openwrt-package.git;${SOURCE}
+  # src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
   cat >>"feeds.conf.default" <<-EOF
 src-git danshui1 https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
-src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
 EOF
   ./scripts/feeds update -a
 
@@ -790,26 +790,18 @@ function Diy_zdypartsh() {
   cd "${HOME_PATH}" || exit
   source "${BUILD_PATH}/${DIY_PART_SH}"
   cd "${HOME_PATH}" || exit
-  echo "GIT_TOP_TAGGED=git-$(git describe --tags)" >> "${GITHUB_ENV}"
+  export GIT_TOP_TAGGED="git-$(git describe --tags)"
+  echo "GIT_TOP_TAGGED=${GIT_TOP_TAGGED}" >> "${GITHUB_ENV}"
 
   # 检查diskman目录是否存在，不存在时创建目录
   if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
     mkdir -p "${HOME_PATH}/package/luci-app-diskman"
   else
     rm -rf "${HOME_PATH}/package/luci-app-diskman"
-    mkdir -p "${HOME_PATH}/package/luci-app-diskman"
   fi
   # 下载diskman的Makefile文件
-  wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/applications/luci-app-diskman/Makefile -O ${HOME_PATH}/package/luci-app-diskman/Makefile
-
-  # diskman依赖库
-  if [[ ! -d "${HOME_PATH}/package/parted" ]]; then
-    mkdir -p "${HOME_PATH}/package/parted"
-  else
-    rm -rf "${HOME_PATH}/package/parted"
-    mkdir -p "${HOME_PATH}/package/parted"
-  fi
-  wget https://raw.githubusercontent.com/careysucci/luci-app-diskman/master/Parted.Makefile -O ${HOME_PATH}/package/parted/Makefile
+  git clone https://github.com/careysucci/luci-app-diskman.git "${HOME_PATH}"/package/diskman
+  cp -rf "${HOME_PATH}"/package/diskman/applications/luci-app-diskman "${HOME_PATH}"/package/luci-app-diskman
 
   # speedtest
   if [[ ! -d "${HOME_PATH}/package/netspeedtest" ]]; then
@@ -831,17 +823,19 @@ function Diy_zdypartsh() {
     # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
   fi
 
-  # # openclash
-  # find . -type d -name '*luci-app-openclash*' -o -name '*OpenClash*' | xargs -i rm -rf {}
-  # sed -i '/OpenClash/d' "feeds.conf.default"
-  # if [[ "${OpenClash_branch}" == "1" ]]; then
-  #   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
-  #   echo "OpenClash_branch=dev" >>${GITHUB_ENV}
-  # else
-  #   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >>"feeds.conf.default"
-  #   echo "OpenClash_branch=master" >>${GITHUB_ENV}
-  # fi
+  # openclash
+  find . -type d -name '*luci-app-openclash*' -o -name '*OpenClash*' | xargs -i rm -rf {}
+  sed -i '/OpenClash/d' "feeds.conf.default"
+  if [[ "${OpenClash_branch}" == "1" ]]; then
+    echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
+    echo "OpenClash_branch=dev" >>"${GITHUB _ENV}"
+  else
+    echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >>"feeds.conf.default"
+    echo "OpenClash_branch=master" >>"${GITHUB_ENV}"
+  fi
 
+  cat feeds.conf.default
+  echo ls ${HOME_PATH}/package/
   cat feeds.conf.default | awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf
   mv -f uniq.conf feeds.conf.default
   sed -i 's@.*danshui*@#&@g' "feeds.conf.default"
@@ -851,6 +845,9 @@ function Diy_zdypartsh() {
   sed -i 's/^#\(.*danshui\)/\1/' "feeds.conf.default"
   sed -i 's/^#\(.*src-git lienol\)/\1/' "feeds.conf.default"
   sed -i 's/^#\(.*src-git other\)/\1/' "feeds.conf.default"
+  echo "11111"
+  cat feeds.conf.default
+  echo ls ${HOME_PATH}/package/
 
   # 正在执行插件语言修改
   if [[ "${LUCI_BANBEN}" == "2" ]]; then
@@ -1492,7 +1489,7 @@ function Diy_prevent() {
   fi
   # 替换掉defconf导致的OpenClash错误的问题
   if [[ "$(grep -ic 'openclash' ${HOME_PATH}/.config | wc -l)" -eq 1 ]]; then
-    sed -i "s/^CONFIG_.*openclash/c\CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
+    sed -i "s/CONFIG_.*openclash/CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
   fi
   if [[ "${OpenClash_branch}" == "1" && $(grep -c "CONFIG_PACKAGE_luci-app-openclash=y" ${HOME_PATH}/.config) -eq '0' ]]; then
     echo "CONFIG_PACKAGE_luci-app-openclash=y" >>${HOME_PATH}/.config
