@@ -491,7 +491,8 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
     fi
     if [[ -d "${HOME_PATH}/build/common/Share/tailscale" ]]; then
       rm -rf "${HOME_PATH}"/feeds/packages/net/tailscale
-      cp -Rf "${HOME_PATH}"/build/common/Share/tailscale "${HOME_PATH}"/feeds/packages/net/tailscale
+      # 不需要tailscale
+      # cp -Rf "${HOME_PATH}"/build/common/Share/tailscale "${HOME_PATH}"/feeds/packages/net/tailscale
     fi
     ;;
   XWRT)
@@ -835,7 +836,7 @@ function Diy_zdypartsh() {
   fi
 
   cat feeds.conf.default
-  echo ls ${HOME_PATH}/package/
+  ls ${HOME_PATH}/package/
   cat feeds.conf.default | awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf
   mv -f uniq.conf feeds.conf.default
   sed -i 's@.*danshui*@#&@g' "feeds.conf.default"
@@ -847,7 +848,7 @@ function Diy_zdypartsh() {
   sed -i 's/^#\(.*src-git other\)/\1/' "feeds.conf.default"
   echo "11111"
   cat feeds.conf.default
-  echo ls ${HOME_PATH}/package/
+  ls ${HOME_PATH}/package/
 
   # 正在执行插件语言修改
   if [[ "${LUCI_BANBEN}" == "2" ]]; then
