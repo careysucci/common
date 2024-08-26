@@ -329,6 +329,10 @@ function svn_co() {
 function Diy_checkout() {
   # 下载源码后，进行源码微调和增加插件源
   cd "${HOME_PATH}" || exit 1
+  # 增加git snapshot commit id
+  export GIT_TOP_TAGGED="git-$(git describe --tags)"
+  echo "GIT_TOP_TAGGED=${GIT_TOP_TAGGED}" >> "${GITHUB_ENV}"
+
   [[ -d "${HOME_PATH}/doc" ]] && rm -rf "${HOME_PATH}/doc"
   [[ ! -d "${HOME_PATH}/LICENSES/doc" ]] && mkdir -p "${HOME_PATH}/LICENSES/doc"
   [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p "${HOME_PATH}/build_logo"
@@ -791,8 +795,6 @@ function Diy_zdypartsh() {
   cd "${HOME_PATH}" || exit
   source "${BUILD_PATH}/${DIY_PART_SH}"
   cd "${HOME_PATH}" || exit
-  export GIT_TOP_TAGGED="git-$(git describe --tags)"
-  echo "GIT_TOP_TAGGED=${GIT_TOP_TAGGED}" >> "${GITHUB_ENV}"
 
   # 检查diskman目录是否存在，不存在时创建目录
   if [[ ! -d "${HOME_PATH}/package/luci-app-diskman" ]]; then
@@ -985,7 +987,7 @@ function Diy_Publicarea() {
   elif [[ -n "${Customized_Information}" ]]; then
     sed -i "s?DESCRIPTION=.*?DESCRIPTION='OpenWrt '\" >> /etc/openwrt_release?g" "${ZZZ_PATH}"
     # sed -i "s?OpenWrt ?${Customized_Information} @ OpenWrt ?g" "${ZZZ_PATH}"
-    sed -i "s?OpenWrt ?${Customized_Information} @ ?g" "${ZZZ_PATH}"
+    sed -i "s?OpenWrt ?${Customized_Information} ?g" "${ZZZ_PATH}"
     echo "个性签名[${Customized_Information}]增加完成"
   fi
 
