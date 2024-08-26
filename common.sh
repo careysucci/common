@@ -825,16 +825,16 @@ function Diy_zdypartsh() {
     # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
   fi
 
-  # openclash
-  find . -type d -name '*luci-app-openclash*' -o -name '*OpenClash*' | xargs -i rm -rf {}
-  sed -i '/OpenClash/d' "feeds.conf.default"
-  if [[ "${OpenClash_branch}" == "1" ]]; then
-    echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
-    echo "OpenClash_branch=dev" >>"${GITHUB _ENV}"
-  else
-    echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >>"feeds.conf.default"
-    echo "OpenClash_branch=master" >>"${GITHUB_ENV}"
-  fi
+  # # openclash
+  # find . -type d -name '*luci-app-openclash*' -o -name '*OpenClash*' | xargs -i rm -rf {}
+  # sed -i '/OpenClash/d' "feeds.conf.default"
+  # if [[ "${OpenClash_branch}" == "1" ]]; then
+  #   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;dev" >>"feeds.conf.default"
+  #   echo "OpenClash_branch=dev" >>"${GITHUB _ENV}"
+  # else
+  #   echo "src-git OpenClash https://github.com/vernesong/OpenClash.git;master" >>"feeds.conf.default"
+  #   echo "OpenClash_branch=master" >>"${GITHUB_ENV}"
+  # fi
 
   cat feeds.conf.default | awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf
   mv -f uniq.conf feeds.conf.default
