@@ -803,6 +803,7 @@ function Diy_zdypartsh() {
   # 下载diskman的Makefile文件
   git clone https://github.com/careysucci/luci-app-diskman.git "${HOME_PATH}"/package/diskman
   cp -rf "${HOME_PATH}"/package/diskman/applications/luci-app-diskman "${HOME_PATH}"/package/luci-app-diskman
+  rm -rf "${HOME_PATH}"/package/diskman
 
   # speedtest
   if [[ ! -d "${HOME_PATH}/package/netspeedtest" ]]; then
@@ -859,6 +860,9 @@ function Diy_zdypartsh() {
     /bin/bash zh-cn.sh && rm -rf zh-cn.sh
   fi
   ./scripts/feeds install -a -f >/dev/null 2>&1
+  echo 3333333
+  cat feeds.conf.default
+  ls ${HOME_PATH}/package/
   # 使用自定义配置文件
   [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
 }
@@ -988,7 +992,8 @@ function Diy_Publicarea() {
     echo "不进行,个性签名设置"
   elif [[ -n "${Customized_Information}" ]]; then
     sed -i "s?DESCRIPTION=.*?DESCRIPTION='OpenWrt '\" >> /etc/openwrt_release?g" "${ZZZ_PATH}"
-    sed -i "s?OpenWrt ?${Customized_Information} @ OpenWrt ?g" "${ZZZ_PATH}"
+    # sed -i "s?OpenWrt ?${Customized_Information} @ OpenWrt ?g" "${ZZZ_PATH}"
+    sed -i "s?OpenWrt ?${Customized_Information} @ ?g" "${ZZZ_PATH}"
     echo "个性签名[${Customized_Information}]增加完成"
   fi
 
