@@ -836,20 +836,15 @@ function Diy_zdypartsh() {
     echo "OpenClash_branch=master" >>"${GITHUB_ENV}"
   fi
 
-  cat feeds.conf.default
-  ls ${HOME_PATH}/package/
   cat feeds.conf.default | awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf
   mv -f uniq.conf feeds.conf.default
   sed -i 's@.*danshui*@#&@g' "feeds.conf.default"
   sed -i 's@.*src-git lienol*@#&@g' "feeds.conf.default"
   sed -i 's@.*src-git other*@#&@g' "feeds.conf.default"
-  ./scripts/feeds update -a
+  ./scripts/feeds update -a -f
   sed -i 's/^#\(.*danshui\)/\1/' "feeds.conf.default"
   sed -i 's/^#\(.*src-git lienol\)/\1/' "feeds.conf.default"
   sed -i 's/^#\(.*src-git other\)/\1/' "feeds.conf.default"
-  echo "11111"
-  cat feeds.conf.default
-  ls ${HOME_PATH}/package/
 
   # 正在执行插件语言修改
   if [[ "${LUCI_BANBEN}" == "2" ]]; then
@@ -860,9 +855,6 @@ function Diy_zdypartsh() {
     /bin/bash zh-cn.sh && rm -rf zh-cn.sh
   fi
   ./scripts/feeds install -a -f >/dev/null 2>&1
-  echo 3333333
-  cat feeds.conf.default
-  ls ${HOME_PATH}/package/
   # 使用自定义配置文件
   [[ -f ${BUILD_PATH}/$CONFIG_FILE ]] && mv ${BUILD_PATH}/$CONFIG_FILE .config
 }
@@ -1493,14 +1485,7 @@ function Diy_prevent() {
       echo "" >>${HOME_PATH}/CHONGTU
     fi
   fi
-  # 替换掉defconf导致的OpenClash错误的问题
-  if [[ "$(grep -ic 'openclash' ${HOME_PATH}/.config | wc -l)" -eq 1 ]]; then
-    sed -i "s/CONFIG_.*openclash/CONFIG_PACKAGE_luci-app-openclash=y/g" ${HOME_PATH}/.config
-  fi
-  if [[ "${OpenClash_branch}" == "1" && $(grep -c "CONFIG_PACKAGE_luci-app-openclash=y" ${HOME_PATH}/.config) -eq '0' ]]; then
-    echo "CONFIG_PACKAGE_luci-app-openclash=y" >>${HOME_PATH}/.config
-  fi
-
+  # defconf导致的OpenClash错误的问题
   cd "${HOME_PATH}" || exit
   make defconfig >/dev/null 2>&1
   [[ ! -d "${HOME_PATH}/build_logo" ]] && mkdir -p ${HOME_PATH}/build_logo
