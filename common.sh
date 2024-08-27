@@ -818,27 +818,27 @@ function Diy_zdypartsh() {
   fi
   git clone https://github.com/sirpdboy/netspeedtest.git "${HOME_PATH}"/package/netspeedtest
 
-  # homeproxy
-  echo "下载homeproxy中"
-  if [[ ! -d "${HOME_PATH}/package/luci-app-homeproxy" ]]; then
-    mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
-  else
-    rm -rf "${HOME_PATH}/package/luci-app-homeproxy"
-    mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
-  fi
-  git clone -b master https://github.com/immortalwrt/homeproxy.git "${HOME_PATH}"/package/luci-app-homeproxy
+  # # homeproxy
+  # echo "下载homeproxy中"
+  # if [[ ! -d "${HOME_PATH}/package/luci-app-homeproxy" ]]; then
+  #   mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
+  # else
+  #   rm -rf "${HOME_PATH}/package/luci-app-homeproxy"
+  #   mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
+  # fi
+  # git clone -b master https://github.com/immortalwrt/homeproxy.git "${HOME_PATH}"/package/luci-app-homeproxy
 
 
-  # passwall
-  find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
-  sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
-  if [[ "${PassWall_luci_branch}" == "1" ]]; then
-    echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >>"feeds.conf.default"
-    # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
-  else
-    echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >>"feeds.conf.default"
-    # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
-  fi
+  # # passwall
+  # find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
+  # sed -i '/passwall.git\;luci/d; /passwall2/d' "feeds.conf.default"
+  # if [[ "${PassWall_luci_branch}" == "1" ]]; then
+  #   echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;luci-smartdns-dev" >>"feeds.conf.default"
+  #   # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+  # else
+  #   echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >>"feeds.conf.default"
+  #   # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+  # fi
 
   # # openclash
   # find . -type d -name '*luci-app-openclash*' -o -name '*OpenClash*' | xargs -i rm -rf {}
