@@ -987,7 +987,7 @@ function Diy_Publicarea() {
   elif [[ -n "${Customized_Information}" ]]; then
     sed -i "s?DESCRIPTION=.*?DESCRIPTION='OpenWrt '\" >> /etc/openwrt_release?g" "${ZZZ_PATH}"
     # sed -i "s?OpenWrt ?${Customized_Information} @ OpenWrt ?g" "${ZZZ_PATH}"
-    sed -i "s?OpenWrt ?${Customized_Information} ?g" "${ZZZ_PATH}"
+    sed -i "s?OpenWrt ?${Customized_Information} @ ${Build_Author_Name} ?g" "${ZZZ_PATH}"
     echo "个性签名[${Customized_Information}]增加完成"
   fi
 
