@@ -826,7 +826,7 @@ function Diy_zdypartsh() {
     rm -rf "${HOME_PATH}/package/luci-app-homeproxy"
     mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
   fi
-  git clone -b dev https://github.com/douglarek/luci-app-homeproxy.git "${HOME_PATH}"/package/luci-app-homeproxy
+  git clone -b master https://github.com/immortalwrt/homeproxy.git "${HOME_PATH}"/package/luci-app-homeproxy
 
 
   # passwall
