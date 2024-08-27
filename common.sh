@@ -803,11 +803,13 @@ function Diy_zdypartsh() {
     rm -rf "${HOME_PATH}/package/luci-app-diskman"
   fi
   # 下载diskman的Makefile文件
+  echo "下载diskman插件中"
   git clone https://github.com/careysucci/luci-app-diskman.git "${HOME_PATH}"/package/diskman
   cp -rf "${HOME_PATH}"/package/diskman/applications/luci-app-diskman "${HOME_PATH}"/package/luci-app-diskman
   rm -rf "${HOME_PATH}"/package/diskman
 
   # speedtest
+  echo "下载speedtest中"
   if [[ ! -d "${HOME_PATH}/package/netspeedtest" ]]; then
     mkdir -p "${HOME_PATH}/package/netspeedtest"
   else
@@ -815,6 +817,17 @@ function Diy_zdypartsh() {
     mkdir -p "${HOME_PATH}/package/netspeedtest"
   fi
   git clone https://github.com/sirpdboy/netspeedtest.git "${HOME_PATH}"/package/netspeedtest
+
+  # homeproxy
+  echo "下载homeproxy中"
+  if [[ ! -d "${HOME_PATH}/package/luci-app-homeproxy" ]]; then
+    mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
+  else
+    rm -rf "${HOME_PATH}/package/luci-app-homeproxy"
+    mkdir -p "${HOME_PATH}/package/luci-app-homeproxy"
+  fi
+  git clone -b dev https://github.com/douglarek/luci-app-homeproxy.git "${HOME_PATH}"/package/luci-app-homeproxy
+
 
   # passwall
   find . -type d -name '*luci-app-passwall*' -o -name 'passwall1' -o -name 'passwall2' | xargs -i rm -rf {}
