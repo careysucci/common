@@ -513,7 +513,8 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
   done
   # 更换golang版本
   rm -rf "${HOME_PATH}"/feeds/packages/lang/golang
-  git clone https://github.com/sbwml/packages_lang_golang -b 22.x "${HOME_PATH}"/feeds/packages/lang/golang
+#  git clone https://github.com/sbwml/packages_lang_golang -b 22.x "${HOME_PATH}"/feeds/packages/lang/golang
+  git clone https://github.com/kenzok8/golang "${HOME_PATH}"/feeds/packages/lang/golang
 
   if [[ -d "${HOME_PATH}/feeds/danshui1/relevance/shadowsocks-libev" ]]; then
     rm -rf "${HOME_PATH}"/feeds/packages/net/shadowsocks-libev
