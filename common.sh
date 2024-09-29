@@ -1263,6 +1263,8 @@ cat >>"${HOME_PATH}/.config" <<-EOF
 CONFIG_PACKAGE_luci=y
 CONFIG_PACKAGE_default-settings=y
 CONFIG_PACKAGE_default-settings-chn=y
+CONFIG_PACKAGE_firewall4=y
+CONFIG_PACKAGE_dnsmasq-full=y
 EOF
 }
 
