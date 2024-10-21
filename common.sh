@@ -38,7 +38,7 @@ function Diy_variable() {
   fi
 
   if [[ -n "${INPUTS_REPO_BRANCH}" ]]; then
-    # SOURCE_CODE="${SOURCE_CODE}"
+    SOURCE_CODE="${SOURCE_CODE}"
     REPO_BRANCH="${INPUTS_REPO_BRANCH}"
     CONFIG_FILE="$(echo "${INPUTS_CONFIG_FILE}" | cut -d"/" -f2)"
     CPU_SELECTION="${INPUTS_CPU_SELECTION}"
@@ -48,22 +48,22 @@ function Diy_variable() {
     CACHEWRTBUILD_SWITCH="${INPUTS_CACHEWRTBUILD_SWITCH}"
     UPDATE_FIRMWARE_ONLINE="${INPUTS_UPDATE_FIRMWARE_ONLINE}"
     COMPILATION_INFORMATION="${INPUTS_COMPILATION_INFORMATION}"
-    # RETAIN_MINUTE="${RETAIN_MINUTE}"
-    # KEEP_LATEST="${KEEP_LATEST}"
+    RETAIN_MINUTE="${RETAIN_MINUTE}"
+    KEEP_LATEST="${KEEP_LATEST}"
     echo "SSH_ACTION=${INPUTS_SSH_ACTION}" >>"${GITHUB_ENV}"
     WAREHOUSE_MAN="${GIT_REPOSITORY##*/}"
   else
-    # SOURCE_CODE="${SOURCE_CODE}"
-    # REPO_BRANCH="${REPO_BRANCH}"
-    # CPU_SELECTION="${CPU_SELECTION}"
-    # INFORMATION_NOTICE="${INFORMATION_NOTICE}"
-    # UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
-    # UPLOAD_RELEASE="${UPLOAD_RELEASE}"
-    # CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
-    # UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
-    # COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
-    # RETAIN_MINUTE="${RETAIN_MINUTE}"
-    # KEEP_LATEST="${KEEP_LATEST}"
+    SOURCE_CODE="${SOURCE_CODE}"
+    REPO_BRANCH="${REPO_BRANCH}"
+    CPU_SELECTION="${CPU_SELECTION}"
+    INFORMATION_NOTICE="${INFORMATION_NOTICE}"
+    UPLOAD_FIRMWARE="${UPLOAD_FIRMWARE}"
+    UPLOAD_RELEASE="${UPLOAD_RELEASE}"
+    CACHEWRTBUILD_SWITCH="${CACHEWRTBUILD_SWITCH}"
+    UPDATE_FIRMWARE_ONLINE="${UPDATE_FIRMWARE_ONLINE}"
+    COMPILATION_INFORMATION="${COMPILATION_INFORMATION}"
+    RETAIN_MINUTE="${RETAIN_MINUTE}"
+    KEEP_LATEST="${KEEP_LATEST}"
     CONFIG_FILE="$(echo "${CONFIG_FILE}" | cut -d"/" -f2)"
     WAREHOUSE_MAN="${GIT_REPOSITORY##*/}"
   fi
@@ -170,8 +170,6 @@ EOF
     export REPO_URL="https://github.com/openwrt/openwrt"
     export SOURCE="Official"
     export SOURCE_OWNER="openwrt's"
-    # export LUCI_EDITION="$(echo "${REPO_BRANCH}" |sed 's/openwrt-//g')"
-    # export DIY_WORK="${FOLDER_NAME}$(echo "${LUCI_EDITION}" |sed "s/\.//g" |sed "s/\-//g")"
     export LUCI_EDITION=${REPO_BRANCH//openwrt-/}
     DIY_WORK=${LUCI_EDITION//\./}
     DIY_WORK=${DIY_WORK//\-/}
@@ -339,24 +337,16 @@ function Diy_checkout() {
 
   git pull
 
-  sed -i '/careysucci/d; /helloworld/d; /passwall/d; /OpenClash/d' "feeds.conf.default"
-  (awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf) <feeds.conf.default
-  mv -f uniq.conf feeds.conf.default
-
-  # 这里增加了源,要对应的删除/etc/opkg/distfeeds.conf插件源
-  # src-git danshui1 https://github.com/281677160/openwrt-package.git;${SOURCE}
-  # src-git passwall3 https://github.com/xiaorouji/openwrt-passwall-packages;main
-  cat >>"feeds.conf.default" <<-EOF
-src-git danshui1 https://github.com/kenzok8/openwrt-packages
-src-git small https://github.com/kenzok8/small
-EOF
-  ./scripts/feeds update -a
-
-  # if [[ -f "${HOME_PATH}/feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json" ]]; then
-  #   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme2" >> "feeds.conf.default"
-  # else
-  #   echo "src-git danshui2 https://github.com/281677160/openwrt-package.git;Theme1" >> "feeds.conf.default"
-  # fi
+  # 一键防冲突
+  sed -i '1i src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+  sed -i '2i src-git small https://github.com/kenzok8/small' feeds.conf.default
+  ./scripts/feeds update -a  && rm -rf feeds/luci/applications/luci-app-mosdns
+  rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+  rm -rf feeds/packages/utils/v2dat
+  rm -rf feeds/packages/lang/golang
+  git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+#  (awk '!/^#/' | awk '!/^$/' | awk '!a[$1" "$2]++{print}' >uniq.conf) <feeds.conf.default
+#  mv -f uniq.conf feeds.conf.default
 
   z="*luci-theme-argon*,*luci-app-argon-config*,*luci-theme-Butterfly*,*luci-theme-netgear*,*luci-theme-atmaterial*, \
 luci-theme-rosy,luci-theme-darkmatter,luci-theme-infinityfreedom,luci-theme-design,luci-app-design-config, \
@@ -511,26 +501,8 @@ luci-app-ssr-plus,*luci-app-passwall*,luci-app-vssr,lua-maxminddb,v2dat,v2ray-ge
   for X in "${HOME_PATH}/feeds/passwall3/"*/; do
     find . -type d -name "${X}" | grep -v 'danshui\|passwall3' | xargs -i rm -rf {}
   done
-  # 更换golang版本
-  rm -rf "${HOME_PATH}"/feeds/packages/lang/golang
-#  git clone https://github.com/sbwml/packages_lang_golang -b 22.x "${HOME_PATH}"/feeds/packages/lang/golang
-  git clone https://github.com/kenzok8/golang "${HOME_PATH}"/feeds/packages/lang/golang
-
-  if [[ -d "${HOME_PATH}/feeds/danshui1/relevance/shadowsocks-libev" ]]; then
-    rm -rf "${HOME_PATH}"/feeds/packages/net/shadowsocks-libev
-    mv -f feeds/danshui1/relevance/shadowsocks-libev "${HOME_PATH}"/feeds/packages/net/shadowsocks-libev
-  fi
-  if [[ -d "${HOME_PATH}/feeds/danshui1/relevance/kcptun" ]]; then
-    rm -rf "${HOME_PATH}"/feeds/packages/net/kcptun
-    mv -f "${HOME_PATH}"/feeds/danshui1/relevance/kcptun "${HOME_PATH}"/feeds/packages/net/kcptun
-  fi
-
-  if [[ ! -d "${HOME_PATH}/feeds/packages/lang/rust" ]]; then
-    cp -Rf "${HOME_PATH}"/build/common/Share/rust "${HOME_PATH}"/feeds/packages/lang/rust
-  fi
-
-  [[ ! -d "${HOME_PATH}/feeds/packages/devel/packr" ]] && cp -Rf "${HOME_PATH}"/build/common/Share/packr "${HOME_PATH}"/feeds/packages/devel/packr
-  ./scripts/feeds update danshui2
+  # 补漏
+  ./scripts/feeds update -a
 
   cp -Rf "${HOME_PATH}"/feeds.conf.default "${HOME_PATH}"/LICENSES/doc/uniq.conf
 }
@@ -595,18 +567,18 @@ EOF
     sed -i 's/admin:.*/admin::0:0:99999:7:::/g' "${FILES_PATH}"/etc/shadow
   fi
 
-  cp -Rf "${HOME_PATH}"/build/common/custom/Postapplication "${FILES_PATH}"/etc/init.d/Postapplication
-  sudo chmod +x "${FILES_PATH}/etc/init.d/Postapplication"
+#  cp -Rf "${HOME_PATH}"/build/common/custom/Postapplication "${FILES_PATH}"/etc/init.d/Postapplication
+#  sudo chmod +x "${FILES_PATH}/etc/init.d/Postapplication"
+#
+#  cp -Rf "${HOME_PATH}"/build/common/custom/networkdetection "${FILES_PATH}"/etc/networkdetection
+#  sudo chmod +x "${FILES_PATH}"/etc/networkdetection
 
-  cp -Rf "${HOME_PATH}"/build/common/custom/networkdetection "${FILES_PATH}"/etc/networkdetection
-  sudo chmod +x "${FILES_PATH}"/etc/networkdetection
-
-  [[ ! -d "${FILES_PATH}/usr/bin" ]] && mkdir -p "${FILES_PATH}"/usr/bin
-  cp -Rf "${HOME_PATH}"/build/common/custom/openwrt.sh "${FILES_PATH}"/usr/bin/openwrt
-  sudo chmod +x "${FILES_PATH}"/usr/bin/openwrt
-
-  echo '#!/bin/bash' >"${DELETE}"
-  sudo chmod +x "${DELETE}"
+#  [[ ! -d "${FILES_PATH}/usr/bin" ]] && mkdir -p "${FILES_PATH}"/usr/bin
+#  cp -Rf "${HOME_PATH}"/build/common/custom/openwrt.sh "${FILES_PATH}"/usr/bin/openwrt
+#  sudo chmod +x "${FILES_PATH}"/usr/bin/openwrt
+#
+#  echo '#!/bin/bash' >"${DELETE}"
+#  sudo chmod +x "${DELETE}"
 
   if [[ -d "${HOME_PATH}/target/linux/armsr" ]]; then
     features_file="${HOME_PATH}/target/linux/armsr/Makefile"
@@ -626,44 +598,44 @@ EOF
 EOF
   fi
 
-  # 修改一些依赖
-  case "${SOURCE_CODE}" in
-  XWRT | OFFICIAL)
-    if [[ -n "$(grep "libustream-wolfssl" ${HOME_PATH}/include/target.mk)" ]]; then
-      sed -i 's?libustream-wolfssl?libustream-openssl?g' "${HOME_PATH}/include/target.mk"
-    elif [[ -z "$(grep "libustream-openssl" ${HOME_PATH}/include/target.mk)" ]]; then
-      sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=libustream-openssl ?g' "${HOME_PATH}/include/target.mk"
-    fi
+#  # 修改一些依赖
+#  case "${SOURCE_CODE}" in
+#  XWRT | OFFICIAL)
+#    if [[ -n "$(grep "libustream-wolfssl" ${HOME_PATH}/include/target.mk)" ]]; then
+#      sed -i 's?libustream-wolfssl?libustream-openssl?g' "${HOME_PATH}/include/target.mk"
+#    elif [[ -z "$(grep "libustream-openssl" ${HOME_PATH}/include/target.mk)" ]]; then
+#      sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=libustream-openssl ?g' "${HOME_PATH}/include/target.mk"
+#    fi
+#
+#    if [[ -n "$(grep "dnsmasq" ${HOME_PATH}/include/target.mk)" ]] && [[ -z "$(grep "dnsmasq-full" ${HOME_PATH}/include/target.mk)" ]]; then
+#      sed -i 's?dnsmasq?dnsmasq-full luci luci-newapi luci-lib-fs?g' "${HOME_PATH}/include/target.mk"
+#    fi
+#
+#    if [[ -z "$(grep "ca-bundle" ${HOME_PATH}/include/target.mk)" ]]; then
+#      sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=ca-bundle ?g' "${HOME_PATH}/include/target.mk"
+#    fi
+#
+#    if [[ -z "$(grep "luci" ${HOME_PATH}/include/target.mk)" ]]; then
+#      sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=luci luci-newapi luci-lib-fs ?g' "${HOME_PATH}/include/target.mk"
+#    fi
+#    ;;
+#  *)
+#    if [[ -d "${HOME_PATH}/package/emortal" ]]; then
+#      if [[ -z "$(grep "default-settings-chn" ${HOME_PATH}/include/target.mk)" ]]; then
+#        sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=default-settings-chn ?g' "${HOME_PATH}/include/target.mk"
+#      fi
+#    else
+#      if [[ -z "$(grep "default-settings" ${HOME_PATH}/include/target.mk)" ]]; then
+#        sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=default-settings ?g' "${HOME_PATH}/include/target.mk"
+#      fi
+#    fi
+#    ;;
+#  esac
 
-    if [[ -n "$(grep "dnsmasq" ${HOME_PATH}/include/target.mk)" ]] && [[ -z "$(grep "dnsmasq-full" ${HOME_PATH}/include/target.mk)" ]]; then
-      sed -i 's?dnsmasq?dnsmasq-full luci luci-newapi luci-lib-fs?g' "${HOME_PATH}/include/target.mk"
-    fi
-
-    if [[ -z "$(grep "ca-bundle" ${HOME_PATH}/include/target.mk)" ]]; then
-      sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=ca-bundle ?g' "${HOME_PATH}/include/target.mk"
-    fi
-
-    if [[ -z "$(grep "luci" ${HOME_PATH}/include/target.mk)" ]]; then
-      sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=luci luci-newapi luci-lib-fs ?g' "${HOME_PATH}/include/target.mk"
-    fi
-    ;;
-  *)
-    if [[ -d "${HOME_PATH}/package/emortal" ]]; then
-      if [[ -z "$(grep "default-settings-chn" ${HOME_PATH}/include/target.mk)" ]]; then
-        sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=default-settings-chn ?g' "${HOME_PATH}/include/target.mk"
-      fi
-    else
-      if [[ -z "$(grep "default-settings" ${HOME_PATH}/include/target.mk)" ]]; then
-        sed -i 's?DEFAULT_PACKAGES:=?DEFAULT_PACKAGES:=default-settings ?g' "${HOME_PATH}/include/target.mk"
-      fi
-    fi
-    ;;
-  esac
-
-  source "${HOME_PATH}"/build/common/Share/19.07/netsupport.sh
+#  source "${HOME_PATH}"/build/common/Share/19.07/netsupport.sh
 
   # 不需要samba
-  [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]] && rm -rf ${HOME_PATH}/build/common/Share/luci-app-samba4
+#  [[ -d "${HOME_PATH}/build/common/Share/luci-app-samba4" ]] && rm -rf ${HOME_PATH}/build/common/Share/luci-app-samba4
   # amba4="$(find . -type d -name 'luci-app-samba4')"
   # autosam="$(find . -type d -name 'autosamba')"
   # if [[ -z "${amba4}" ]] && [[ -n "${autosam}" ]]; then
@@ -688,15 +660,15 @@ EOF
     cp -Rf ${BUILD_PATH}/files ${HOME_PATH}/files
   fi
 
-  # 定时更新固件的插件包
-  if [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]]; then
-    source ${BUILD_PATH}/upgrade.sh && Diy_Part1
-  else
-    find . -type d -name "luci-app-autoupdate" -print0 | xargs -0 rm -rf {}
-    if [[ -n "$(grep "luci-app-autoupdate" ${HOME_PATH}/include/target.mk)" ]]; then
-      sed -i 's?luci-app-autoupdate??g' ${HOME_PATH}/include/target.mk
-    fi
-  fi
+#  # 定时更新固件的插件包
+#  if [[ "${UPDATE_FIRMWARE_ONLINE}" == "true" ]]; then
+#    source ${BUILD_PATH}/upgrade.sh && Diy_Part1
+#  else
+#    find . -type d -name "luci-app-autoupdate" -print0 | xargs -0 rm -rf {}
+#    if [[ -n "$(grep "luci-app-autoupdate" ${HOME_PATH}/include/target.mk)" ]]; then
+#      sed -i 's?luci-app-autoupdate??g' ${HOME_PATH}/include/target.mk
+#    fi
+#  fi
 }
 
 function Diy_Notice() {
@@ -883,111 +855,111 @@ function Diy_Publicarea() {
   ipadd="$(grep "ipaddr:-" "${GENE_PATH}" | grep -v 'addr_offset' | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")"
   netmas="$(grep "netmask:-" "${GENE_PATH}" | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")"
   opname="$(grep "hostname=" "${GENE_PATH}" | grep -v '\$hostname' | cut -d "'" -f2)"
-  if [[ -n "$(grep "set network.\${1}6.device" "${GENE_PATH}")" ]]; then
-    ifnamee="uci set network.ipv6.device='@lan'"
-    set_add="uci add_list firewall.@zone[0].network='ipv6'"
-  else
-    ifnamee="uci set network.ipv6.ifname='@lan'"
-    set_add="uci set firewall.@zone[0].network='lan ipv6'"
-  fi
+#  if [[ -n "$(grep "set network.\${1}6.device" "${GENE_PATH}")" ]]; then
+#    ifnamee="uci set network.ipv6.device='@lan'"
+#    set_add="uci add_list firewall.@zone[0].network='ipv6'"
+#  else
+#    ifnamee="uci set network.ipv6.ifname='@lan'"
+#    set_add="uci set firewall.@zone[0].network='lan ipv6'"
+#  fi
+#
+#  if [[ "${SOURCE_CODE}" == "OFFICIAL" ]] && [[ "${REPO_BRANCH}" == "openwrt-19.07" ]]; then
+#    devicee="uci set network.ipv6.device='@lan'"
+#  fi
 
-  if [[ "${SOURCE_CODE}" == "OFFICIAL" ]] && [[ "${REPO_BRANCH}" == "openwrt-19.07" ]]; then
-    devicee="uci set network.ipv6.device='@lan'"
-  fi
+#  # AdGuardHome内核
+#  if [[ "${AdGuardHome_Core}" == "1" ]]; then
+#    echo "AdGuardHome_Core=1" >>${GITHUB_ENV}
+#  else
+#    [[ -f "${HOME_PATH}/files/usr/bin/AdGuardHome" ]] && rm -rf ${HOME_PATH}/files/usr/bin/AdGuardHome
+#    echo "AdGuardHome_Core=0" >>${GITHUB_ENV}
+#  fi
 
-  # AdGuardHome内核
-  if [[ "${AdGuardHome_Core}" == "1" ]]; then
-    echo "AdGuardHome_Core=1" >>${GITHUB_ENV}
-  else
-    [[ -f "${HOME_PATH}/files/usr/bin/AdGuardHome" ]] && rm -rf ${HOME_PATH}/files/usr/bin/AdGuardHome
-    echo "AdGuardHome_Core=0" >>${GITHUB_ENV}
-  fi
+#  # openclash内核
+#  if [[ "${OpenClash_Core}" == "1" ]]; then
+#    echo "OpenClash_Core=1" >>${GITHUB_ENV}
+#  elif [[ "${OpenClash_Core}" == "2" ]]; then
+#    echo "OpenClash_Core=2" >>${GITHUB_ENV}
+#  else
+#    echo "OpenClash_Core=0" >>${GITHUB_ENV}
+#    [[ -d "${HOME_PATH}/files/etc/openclash/core" ]] && rm -rf ${HOME_PATH}/files/etc/openclash/core
+#  fi
+#  luci_path="$({ find "${HOME_PATH}/feeds" | grep 'luci-openclash' | grep 'root'; } 2>"/dev/null")"
+#  if [[ -f "${luci_path}" ]] && [[ $(grep -c "uci get openclash.config.enable" "${luci_path}") -eq '0' ]]; then
+#    sed -i '/uci -q set openclash.config.enable=0/i\if [[ "\$(uci get openclash.config.enable)" == "0" ]] || [[ -z "\$(uci get openclash.config.enable)" ]]; then' "${luci_path}"
+#    sed -i '/uci -q commit openclash/a\fi' "${luci_path}"
+#  fi
 
-  # openclash内核
-  if [[ "${OpenClash_Core}" == "1" ]]; then
-    echo "OpenClash_Core=1" >>${GITHUB_ENV}
-  elif [[ "${OpenClash_Core}" == "2" ]]; then
-    echo "OpenClash_Core=2" >>${GITHUB_ENV}
-  else
-    echo "OpenClash_Core=0" >>${GITHUB_ENV}
-    [[ -d "${HOME_PATH}/files/etc/openclash/core" ]] && rm -rf ${HOME_PATH}/files/etc/openclash/core
-  fi
-  luci_path="$({ find "${HOME_PATH}/feeds" | grep 'luci-openclash' | grep 'root'; } 2>"/dev/null")"
-  if [[ -f "${luci_path}" ]] && [[ $(grep -c "uci get openclash.config.enable" "${luci_path}") -eq '0' ]]; then
-    sed -i '/uci -q set openclash.config.enable=0/i\if [[ "\$(uci get openclash.config.enable)" == "0" ]] || [[ -z "\$(uci get openclash.config.enable)" ]]; then' "${luci_path}"
-    sed -i '/uci -q commit openclash/a\fi' "${luci_path}"
-  fi
-
-  if [[ "${Enable_IPV6_function}" == "1" ]]; then
-    echo "固件加入IPV6功能"
-    export Create_Ipv6_Lan="0"
-    export Enable_IPV4_function="0"
-    echo "Create_Ipv6_Lan=0" >>${GITHUB_ENV}
-    echo "Enable_IPV4_function=0" >>${GITHUB_ENV}
-    echo "Enable_IPV6_function=1" >>${GITHUB_ENV}
-    echo "
-    uci set network.lan.ip6assign='64'
-    uci commit network
-    uci set dhcp.lan.ra='server'
-    uci set dhcp.lan.dhcpv6='server'
-    uci set dhcp.lan.ra_management='1'
-    uci set dhcp.lan.ra_default='1'
-    uci set dhcp.@dnsmasq[0].localservice=0
-    uci set dhcp.@dnsmasq[0].nonwildcard=0
-    uci set dhcp.@dnsmasq[0].filter_aaaa='0'
-    uci commit dhcp
-  " >>"${DEFAULT_PATH}"
-  fi
-
-  if [[ "${Create_Ipv6_Lan}" == "1" ]]; then
-    echo "爱快+OP双系统时,爱快接管IPV6,在OP创建IPV6的lan口接收IPV6信息"
-    export Enable_IPV4_function="0"
-    echo "Create_Ipv6_Lan=1" >>${GITHUB_ENV}
-    echo "Enable_IPV4_function=0" >>${GITHUB_ENV}
-    echo "Enable_IPV6_function=0" >>${GITHUB_ENV}
-    echo "
-    uci delete network.lan.ip6assign
-    uci set network.lan.delegate='0'
-    uci commit network
-    uci delete dhcp.lan.ra
-    uci delete dhcp.lan.ra_management
-    uci delete dhcp.lan.ra_default
-    uci delete dhcp.lan.dhcpv6
-    uci delete dhcp.lan.ndp
-    uci set dhcp.@dnsmasq[0].filter_aaaa='0'
-    uci commit dhcp
-    uci set network.ipv6=interface
-    uci set network.ipv6.proto='dhcpv6'
-    ${devicee}
-    ${ifnamee}
-    uci set network.ipv6.reqaddress='try'
-    uci set network.ipv6.reqprefix='auto'
-    uci commit network
-    ${set_add}
-    uci commit firewall
-  " >>"${DEFAULT_PATH}"
-  fi
-
-  if [[ "${Enable_IPV4_function}" == "1" ]]; then
-    echo "Enable_IPV4_function=1" >>${GITHUB_ENV}
-    echo "Enable_IPV6_function=0" >>${GITHUB_ENV}
-    echo "Create_Ipv6_Lan=0" >>${GITHUB_ENV}
-    echo "固件加入IPV4功能"
-    echo "
-    uci delete network.globals.ula_prefix
-    uci delete network.lan.ip6assign
-    uci delete network.wan6
-    uci set network.lan.delegate='0' 
-    uci commit network
-    uci delete dhcp.lan.ra
-    uci delete dhcp.lan.ra_management
-    uci delete dhcp.lan.ra_default
-    uci delete dhcp.lan.dhcpv6
-    uci delete dhcp.lan.ndp
-    uci set dhcp.@dnsmasq[0].filter_aaaa='1'
-    uci commit dhcp
-  " >>"${DEFAULT_PATH}"
-  fi
+#  if [[ "${Enable_IPV6_function}" == "1" ]]; then
+#    echo "固件加入IPV6功能"
+#    export Create_Ipv6_Lan="0"
+#    export Enable_IPV4_function="0"
+#    echo "Create_Ipv6_Lan=0" >>${GITHUB_ENV}
+#    echo "Enable_IPV4_function=0" >>${GITHUB_ENV}
+#    echo "Enable_IPV6_function=1" >>${GITHUB_ENV}
+#    echo "
+#    uci set network.lan.ip6assign='64'
+#    uci commit network
+#    uci set dhcp.lan.ra='server'
+#    uci set dhcp.lan.dhcpv6='server'
+#    uci set dhcp.lan.ra_management='1'
+#    uci set dhcp.lan.ra_default='1'
+#    uci set dhcp.@dnsmasq[0].localservice=0
+#    uci set dhcp.@dnsmasq[0].nonwildcard=0
+#    uci set dhcp.@dnsmasq[0].filter_aaaa='0'
+#    uci commit dhcp
+#  " >>"${DEFAULT_PATH}"
+#  fi
+#
+#  if [[ "${Create_Ipv6_Lan}" == "1" ]]; then
+#    echo "爱快+OP双系统时,爱快接管IPV6,在OP创建IPV6的lan口接收IPV6信息"
+#    export Enable_IPV4_function="0"
+#    echo "Create_Ipv6_Lan=1" >>${GITHUB_ENV}
+#    echo "Enable_IPV4_function=0" >>${GITHUB_ENV}
+#    echo "Enable_IPV6_function=0" >>${GITHUB_ENV}
+#    echo "
+#    uci delete network.lan.ip6assign
+#    uci set network.lan.delegate='0'
+#    uci commit network
+#    uci delete dhcp.lan.ra
+#    uci delete dhcp.lan.ra_management
+#    uci delete dhcp.lan.ra_default
+#    uci delete dhcp.lan.dhcpv6
+#    uci delete dhcp.lan.ndp
+#    uci set dhcp.@dnsmasq[0].filter_aaaa='0'
+#    uci commit dhcp
+#    uci set network.ipv6=interface
+#    uci set network.ipv6.proto='dhcpv6'
+#    ${devicee}
+#    ${ifnamee}
+#    uci set network.ipv6.reqaddress='try'
+#    uci set network.ipv6.reqprefix='auto'
+#    uci commit network
+#    ${set_add}
+#    uci commit firewall
+#  " >>"${DEFAULT_PATH}"
+#  fi
+#
+#  if [[ "${Enable_IPV4_function}" == "1" ]]; then
+#    echo "Enable_IPV4_function=1" >>${GITHUB_ENV}
+#    echo "Enable_IPV6_function=0" >>${GITHUB_ENV}
+#    echo "Create_Ipv6_Lan=0" >>${GITHUB_ENV}
+#    echo "固件加入IPV4功能"
+#    echo "
+#    uci delete network.globals.ula_prefix
+#    uci delete network.lan.ip6assign
+#    uci delete network.wan6
+#    uci set network.lan.delegate='0'
+#    uci commit network
+#    uci delete dhcp.lan.ra
+#    uci delete dhcp.lan.ra_management
+#    uci delete dhcp.lan.ra_default
+#    uci delete dhcp.lan.dhcpv6
+#    uci delete dhcp.lan.ndp
+#    uci set dhcp.@dnsmasq[0].filter_aaaa='1'
+#    uci commit dhcp
+#  " >>"${DEFAULT_PATH}"
+#  fi
 
   if [[ "${Default_theme}" == "0" ]] || [[ -z "${Default_theme}" ]]; then
     echo "Default_theme=0" >>${GITHUB_ENV}
@@ -1122,14 +1094,10 @@ function Diy_Publicarea() {
   fi
 
   if [[ "${Password_free_login}" == "1" ]]; then
-    sed -i '/CYXluq4wUazHjmCDBCqXF/d' "${ZZZ_PATH}"
+    sed -i '/ddd/d' "${ZZZ_PATH}"
     echo "固件免密登录设置完成"
   fi
 
-  if [[ "${Disable_53_redirection}" == "1" ]]; then
-    sed -i '/to-ports 53/d' "${ZZZ_PATH}"
-    echo "删除DNS重定向53端口完成"
-  fi
 
   if [[ "${Cancel_running}" == "1" ]]; then
     echo "sed -i '/coremark/d' /etc/crontabs/root" >>"${DEFAULT_PATH}"
@@ -1263,14 +1231,12 @@ cat >>"${HOME_PATH}/.config" <<-EOF
 CONFIG_PACKAGE_luci=y
 CONFIG_PACKAGE_default-settings=y
 CONFIG_PACKAGE_default-settings-chn=y
-CONFIG_PACKAGE_firewall4=y
-CONFIG_PACKAGE_dnsmasq-full=y
 EOF
 }
 
 function Diy_prevent() {
   cd "${HOME_PATH}" || exit
-  Diy_IPv6helper
+#  Diy_IPv6helper
   echo "正在执行：判断插件有否冲突减少编译错误"
   make defconfig >/dev/null 2>&1
 
@@ -2255,13 +2221,13 @@ function Diy_menu6() {
   Diy_prevent
   Make_defconfig
   Diy_Publicarea2
-  Diy_adguardhome
-  Diy_upgrade2
+#  Diy_adguardhome
+#  Diy_upgrade2
 }
 
 function Diy_menu5() {
   Diy_feeds
-  Diy_IPv6helper
+#  Diy_IPv6helper
 }
 
 function Diy_menu4() {
